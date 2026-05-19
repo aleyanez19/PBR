@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GrapeTrack To-Do</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <style>
+        :root {
+            --black: #0a0a0a;
+            --burgundy: #4a1020;
+            --cream: #e8e4d9;
+            --card: #f6f2e8;
+            --gray: #d6d6d3;
+            --gold: #9a873f;
+            --ink: #251015
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--cream);
+            color: var(--ink);
+            animation: pageIn .5s ease-out
+        }
+
+        @keyframes pageIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        @keyframes growBar {
+            from {
+                transform: scaleY(0)
+            }
+
+            to {
+                transform: scaleY(1)
+            }
+        }
+
+        .top-nav {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: var(--black);
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding: 20px
+        }
+
+        .top-nav a {
+            color: var(--cream);
+            font-weight: 900;
+            text-transform: uppercase;
+            text-decoration: none;
+            font-size: .8rem;
+            position: relative;
+            transition: .3s
+        }
+
+        .top-nav a:after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -7px;
+            width: 0;
+            height: 2px;
+            background: var(--burgundy);
+            transition: .3s
+        }
+
+        .top-nav a:hover {
+            color: white
+        }
+
+        .top-nav a:hover:after,
+        .top-nav a.active:after {
+            width: 100%
+        }
+
+        main {
+            padding: 56px 7vw
+        }
+
+        .hero-title {
+            font-family: "Arial Black", Impact, sans-serif;
+            font-size: clamp(4rem, 12vw, 11rem);
+            line-height: .82;
+            letter-spacing: -.08em;
+            color: var(--burgundy);
+            text-transform: uppercase;
+            margin: 0 0 40px
+        }
+
+        .section {
+            margin: 48px 0
+        }
+
+        .panel,
+        .todo-card {
+            background: var(--card);
+            border-radius: 26px;
+            padding: 24px;
+            transition: transform .2s, box-shadow .2s
+        }
+
+        .panel:hover,
+        .todo-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 14px 24px rgba(74, 16, 32, .13)
+        }
+
+        h2 {
+            font-family: "Arial Black", Impact, sans-serif;
+            color: var(--burgundy);
+            text-transform: uppercase;
+            font-size: 2rem
+        }
+
+        .swatches {
+            display: flex;
+            gap: 34px;
+            align-items: center
+        }
+
+        .swatch {
+            width: 110px;
+            height: 58px;
+            border-radius: 999px
+        }
+
+        .circle {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%
+        }
+
+        .black {
+            background: var(--black)
+        }
+
+        .burg {
+            background: var(--burgundy)
+        }
+
+        .gold {
+            background: var(--gold)
+        }
+
+        .grid2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px
+        }
+
+        .grid3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px
+        }
+
+        canvas {
+            max-height: 330px
+        }
+
+        .spreadsheet {
+            height: 470px;
+            background: #fff;
+            border: 1px solid #cfcfcf;
+            background-image: linear-gradient(#d9d9d9 1px, transparent 1px), linear-gradient(90deg, #d9d9d9 1px, transparent 1px);
+            background-size: 100% 32px, 105px 100%;
+            position: relative
+        }
+
+        .spreadsheet:after {
+            content: "LJDN";
+            position: absolute;
+            right: 20px;
+            bottom: 12px;
+            font-size: .8rem
+        }
+
+        .kanban {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 30px
+        }
+
+        .dates {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px
+        }
+
+        .datebox,
+        .notes {
+            background: #f8f8f2;
+            border-radius: 2px;
+            padding: 22px;
+            font-family: "Arial Black", Impact, sans-serif;
+            color: var(--burgundy)
+        }
+
+        .datebox {
+            font-size: 3rem;
+            line-height: .85
+        }
+
+        .notes {
+            height: 70px;
+            font-size: 1.2rem;
+            margin-bottom: 20px
+        }
+
+        .columns {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px
+        }
+
+        .col h3 {
+            text-align: center;
+            font-weight: 400
+        }
+
+        .todo-card {
+            min-height: 210px
+        }
+
+        .todo-card ul {
+            line-height: 1.6
+        }
+
+        .btn {
+            border: 0;
+            background: var(--burgundy);
+            color: var(--cream);
+            padding: 12px 18px;
+            border-radius: 999px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: .25s
+        }
+
+        .btn:hover {
+            background: var(--black);
+            transform: scale(1.03)
+        }
+
+        .footer {
+            background: var(--burgundy);
+            color: var(--cream);
+            display: flex;
+            justify-content: space-between;
+            gap: 18px;
+            padding: 30px 7vw;
+            font-size: .9rem
+        }
+
+        @media(max-width:850px) {
+            .top-nav {
+                flex-wrap: wrap;
+                gap: 15px
+            }
+
+            .grid2,
+            .grid3,
+            .kanban,
+            .columns {
+                grid-template-columns: 1fr
+            }
+
+            .footer {
+                flex-direction: column
+            }
+
+            .swatches {
+                flex-wrap: wrap
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="top-nav"><a href="index.html">Home</a><a href="dashboard.html">Dashboard</a><a
+            href="about.html">About</a><a class="active" href="to-do.html">To-Do</a></nav>
+    <main>
+        <h1 class="hero-title">TO-DO</h1>
+        <section class="section panel">
+            <h2>Color Palette</h2>
+            <div class="swatches">
+                <div class="swatch black"></div>
+                <div class="circle burg"></div>
+                <div class="circle gold"></div>
+            </div>
+        </section>
+        <section class="section panel">
+            <h2>Typography</h2>
+            <p
+                style="font-family:'Arial Black',Impact,sans-serif;font-size:5rem;letter-spacing:-.07em;margin:0;color:#4a1020">
+                TO-DO / ABOUT VISTA</p>
+            <p>Massive uppercase display type paired with simple readable body copy.</p>
+        </section>
+        <section class="section grid2">
+            <div class="panel">
+                <h2>Area Chart</h2><canvas id="areaChart"></canvas>
+            </div>
+            <div class="panel">
+                <h2>Histogram</h2><canvas id="barChart"></canvas>
+            </div>
+        </section>
+        <section class="section panel">
+            <h2>Spreadsheet Preview</h2>
+            <div class="spreadsheet"></div>
+        </section>
+        <section class="section panel">
+            <h2>To-Do Kanban</h2>
+            <div class="kanban">
+                <div>
+                    <div class="notes">notes</div>
+                    <div class="dates">
+                        <div class="datebox">MAR<br>13</div>
+                        <div class="datebox">MAY</div>
+                    </div>
+                    <h2 style="font-size:1.5rem;margin-top:80px">links</h2>
+                </div>
+                <div>
+                    <div class="columns">
+                        <div class="col">
+                            <h3>Not started</h3>
+                            <div class="todo-card" draggable="true">
+                                <ul>
+                                    <li>Bla bla</li>
+                                    <li>Marcar a</li>
+                                    <li>Inspeccion 8:30-m83</li>
+                                    <li>Contar lotes</li>
+                                    <li>Tarea de weeds</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <h3>Started</h3>
+                            <div class="todo-card" draggable="true">
+                                <ul>
+                                    <li>Bla bla</li>
+                                    <li>Marcar a</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <h3>Finished</h3>
+                            <div class="todo-card" draggable="true">
+                                <ul>
+                                    <li>Bla bla</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="footer"><span>@pedrobaranzini</span><span>hello@reallygreatsite.com</span><span>Nogales, AZ</span>
+    </footer>
+    <script>
+        new Chart(document.getElementById("areaChart"), { type: "line", data: { labels: ["2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025"], datasets: ["Salud", "Productividad", "Juegos", "Educación"].map((l, i) => ({ label: l, data: [3 + i, 5 + i, 4 + i, 7 + i, 8 + i, 9 + i, 12 + i, 11 + i, 13 + i, 14 + i, 15 + i, 17 + i], fill: true, tension: .4, backgroundColor: ["rgba(74,16,32,.35)", "rgba(74,16,32,.25)", "rgba(154,135,63,.25)", "rgba(10,10,10,.15)"][i], borderColor: "#4a1020" })) }, options: { plugins: { legend: { position: "top" } }, scales: { y: { beginAtZero: true } } } });
+        new Chart(document.getElementById("barChart"), { type: "bar", data: { labels: ["0", "10", "20", "30", "40", "50", "60", "70", "80", "90", "100"], datasets: [{ label: "Grupo etario", data: [1, 2, 6, 10, 17, 20, 16, 10, 7, 3, 1], backgroundColor: "#4a1020" }] }, options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } } });
+        document.querySelectorAll(".todo-card").forEach(card => card.addEventListener("dragstart", e => e.dataTransfer.setData("text/plain", card.innerHTML)));
+        document.querySelectorAll(".col").forEach(col => { col.addEventListener("dragover", e => e.preventDefault()); col.addEventListener("drop", e => { e.preventDefault(); const c = document.createElement("div"); c.className = "todo-card"; c.draggable = true; c.innerHTML = e.dataTransfer.getData("text/plain"); col.appendChild(c); }); });
+    </script>
+</body>
+
+</html>

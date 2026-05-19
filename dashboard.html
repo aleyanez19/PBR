@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GrapeTrack Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <style>
+        :root {
+            --black: #0a0a0a;
+            --burgundy: #4a1020;
+            --burgundy2: #641b31;
+            --cream: #e8e4d9;
+            --card: #f6f2e8;
+            --gray: #d6d6d3;
+            --gold: #9a873f;
+            --ink: #251015
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--cream);
+            color: var(--ink);
+            animation: pageIn .5s ease-out
+        }
+
+        @keyframes pageIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        @keyframes growBar {
+            from {
+                transform: scaleY(0)
+            }
+
+            to {
+                transform: scaleY(1)
+            }
+        }
+
+        .top-nav {
+            height: 58px;
+            background: var(--black);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            position: sticky;
+            top: 0;
+            z-index: 50
+        }
+
+        .top-nav a {
+            color: var(--cream);
+            font-weight: 900;
+            text-transform: uppercase;
+            font-size: .8rem;
+            text-decoration: none;
+            position: relative;
+            transition: .3s ease
+        }
+
+        .top-nav a:after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -8px;
+            width: 0;
+            height: 2px;
+            background: var(--burgundy);
+            transition: .3s ease
+        }
+
+        .top-nav a:hover {
+            color: white
+        }
+
+        .top-nav a:hover:after,
+        .top-nav a.active:after {
+            width: 100%
+        }
+
+        .app {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: calc(100vh - 58px)
+        }
+
+        .sidebar {
+            background: var(--burgundy);
+            color: var(--cream);
+            padding: 28px 0;
+            position: relative
+        }
+
+        .logo {
+            font-family: "Arial Black", Impact, sans-serif;
+            font-size: 2.5rem;
+            letter-spacing: -.08em;
+            padding: 0 24px 30px
+        }
+
+        .side-link {
+            display: block;
+            padding: 16px 24px 16px 28px;
+            border-left: 5px solid transparent;
+            color: var(--cream);
+            font-family: "Arial Black", Impact, sans-serif;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+            cursor: pointer;
+            transition: .2s
+        }
+
+        .side-link:hover,
+        .side-link.active {
+            background: rgba(232, 228, 217, .13);
+            border-left-color: var(--cream)
+        }
+
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            z-index: 99;
+            border: 0;
+            background: var(--burgundy);
+            color: var(--cream);
+            border-radius: 999px;
+            padding: 14px 18px;
+            font-weight: 900
+        }
+
+        .main {
+            padding: 34px;
+            overflow: hidden
+        }
+
+        .view {
+            display: none
+        }
+
+        .view.active {
+            display: block
+        }
+
+        h1 {
+            font-family: "Arial Black", Impact, sans-serif;
+            font-size: clamp(2.8rem, 8vw, 7rem);
+            line-height: .82;
+            letter-spacing: -.06em;
+            color: var(--burgundy);
+            margin: 0 0 26px;
+            text-transform: uppercase
+        }
+
+        .kpis {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(140px, 1fr));
+            gap: 18px
+        }
+
+        .card,
+        .lot-card,
+        .panel {
+            background: var(--card);
+            border-radius: 26px;
+            padding: 22px;
+            box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+            transition: transform .2s, box-shadow .2s
+        }
+
+        .card:hover,
+        .lot-card:hover,
+        .panel:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 22px rgba(74, 16, 32, .14)
+        }
+
+        .card .num {
+            font-family: "Arial Black", Impact, sans-serif;
+            font-size: 2.6rem;
+            color: var(--burgundy)
+        }
+
+        .grid2 {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 20px;
+            margin-top: 22px
+        }
+
+        .panel h2 {
+            font-family: "Arial Black", Impact, sans-serif;
+            color: var(--burgundy);
+            text-transform: uppercase;
+            margin-top: 0
+        }
+
+        canvas {
+            max-height: 340px
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card);
+            border-radius: 22px;
+            overflow: hidden
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 14px;
+            border-bottom: 1px solid #ddd6c8
+        }
+
+        th {
+            font-family: "Arial Black", Impact, sans-serif;
+            color: var(--burgundy);
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: .8rem;
+        }
+
+        tr {
+            transition: background 0.15s;
+        }
+
+        tr:hover {
+            background: rgba(74, 16, 32, .08)
+        }
+
+        .btn {
+            border: 0;
+            background: var(--burgundy);
+            color: var(--cream);
+            padding: 12px 18px;
+            border-radius: 999px;
+            font-weight: 900;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background .25s, transform .25s
+        }
+
+        .btn:hover {
+            background: var(--black);
+            transform: scale(1.03)
+        }
+
+        .btn.secondary {
+            background: var(--black)
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-weight: 900;
+            text-transform: uppercase;
+            font-size: .78rem
+        }
+
+        input,
+        select,
+        textarea {
+            border: 0;
+            background: #fff;
+            padding: 13px;
+            border-radius: 12px;
+            font: inherit
+        }
+
+        textarea {
+            min-height: 110px
+        }
+
+        .checks {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            text-transform: none;
+            font-weight: 400
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(220px, 1fr));
+            gap: 18px
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: var(--burgundy);
+            color: var(--cream);
+            font-size: .75rem;
+            font-weight: 900
+        }
+
+        .error {
+            background: #fff0f0;
+            color: #7c1020;
+            border-radius: 14px;
+            padding: 14px;
+            margin-top: 14px;
+            display: none
+        }
+
+        .success {
+            background: #f5fff0;
+            color: #315520;
+            border-radius: 14px;
+            padding: 14px;
+            margin-top: 14px;
+            display: none
+        }
+
+        .footer {
+            background: var(--burgundy);
+            color: var(--cream);
+            display: flex;
+            justify-content: space-between;
+            gap: 18px;
+            padding: 30px 34px;
+            font-size: .9rem
+        }
+
+        @media(max-width:900px) {
+            .app {
+                grid-template-columns: 1fr
+            }
+
+            .sidebar {
+                position: fixed;
+                z-index: 80;
+                inset: 58px auto 0 0;
+                width: 250px;
+                transform: translateX(-100%);
+                transition: .25s
+            }
+
+            .sidebar.open {
+                transform: translateX(0)
+            }
+
+            .mobile-toggle {
+                display: block
+            }
+
+            .kpis,
+            .grid2,
+            .form-grid,
+            .cards {
+                grid-template-columns: 1fr
+            }
+
+            .main {
+                padding: 22px
+            }
+
+            .top-nav {
+                flex-wrap: wrap;
+                height: auto;
+                padding: 15px
+            }
+
+            .footer {
+                flex-direction: column
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="top-nav"><a href="index.html">Home</a><a class="active" href="dashboard.html">Dashboard</a><a
+            href="about.html">About</a><a href="to-do.html">To-Do</a></nav>
+    <button class="mobile-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">MENU</button>
+    <div class="app">
+        <aside class="sidebar">
+            <div class="logo">PBR<br><span style="font-size:1rem;letter-spacing:0">GrapeTrack</span></div>
+            <a class="side-link active" data-view="dash">Dashboard</a><a class="side-link" data-view="new">Nueva</a><a
+                class="side-link" data-view="lots">Lotes</a><a class="side-link" data-view="reports">Reportes</a><a
+                class="side-link" data-view="alerts">Alertas</a><a class="side-link" data-view="export">Exportar</a>
+        </aside>
+        <main class="main">
+            <section class="view active" id="dash">
+                <h1>Dashboard</h1>
+                <div class="kpis" id="kpis"></div>
+                <div class="grid2">
+                    <div class="panel">
+                        <h2>Defect Causes</h2><canvas id="defectChart"></canvas>
+                    </div>
+                    <div class="panel">
+                        <h2>Lots Table</h2>
+                        <table id="lotTable"></table><button class="btn" style="margin-top:16px"
+                            onclick="getAIInsights()">AI Insights</button>
+                        <div class="error" id="aiError"></div>
+                        <div class="success" id="aiOutput"></div>
+                    </div>
+                </div>
+            </section>
+            <section class="view" id="new">
+                <h1>Nueva</h1>
+                <div class="panel">
+                    <h2>New Inspection Lot</h2>
+                    <form id="lotForm" class="form-grid">
+                        <label class="field">Lot ID<input required name="lotId" placeholder="26M04-8"></label><label
+                            class="field">Truck<input name="truck" placeholder="TC-33"></label><label
+                            class="field">Grower<input name="grower" placeholder="M03"></label><label
+                            class="field">Variety<input name="variety" placeholder="Flame"></label><label
+                            class="field">Cases<input type="number" name="cases" placeholder="960"></label><label
+                            class="field">Date<input type="date" name="date"></label><label class="field">Status<select
+                                name="status">
+                                <option>Passed</option>
+                                <option>Failed</option>
+                                <option>Appeal</option>
+                                <option>Canada</option>
+                            </select></label><label class="field">Packaging<input name="packaging"
+                                placeholder='10/2 "Vista Vineyards" clamshell'></label>
+                        <div class="field" style="grid-column:1/-1">Defects<div class="checks"><label><input
+                                        type="checkbox" value="Shattered berries"> Shattered
+                                    berries</label><label><input type="checkbox" value="Scars">
+                                    Scars</label><label><input type="checkbox" value="Less than 1/4 lb bunches"> Less
+                                    than 1/4 lb bunches</label><label><input type="checkbox" value="Straggly">
+                                    Straggly</label><label><input type="checkbox" value="Damage by trimming"> Damage by
+                                    trimming</label><label><input type="checkbox" value="Mixed bunch sizes"> Mixed bunch
+                                    sizes</label></div>
+                        </div>
+                        <label class="field" style="grid-column:1/-1">Notes<textarea
+                                name="notes"></textarea></label><button class="btn" type="submit">Save Lot</button>
+                    </form>
+                    <div id="saveMsg" class="success">Lot saved in localStorage.</div>
+                </div>
+            </section>
+            <section class="view" id="lots">
+                <h1>Lotes</h1><input id="filterLots" placeholder="Filter lots..." style="width:100%;margin-bottom:20px">
+                <div class="cards" id="lotCards"></div>
+            </section>
+            <section class="view" id="reports">
+                <h1>Reportes</h1>
+                <div class="panel">
+                    <h2>Report Builder</h2>
+                    <p>Select a lot from LOTES, then use the notes and defect summary to write USDA inspection reports.
+                    </p><button class="btn" onclick="downloadCSV()">Download All Lots CSV</button>
+                </div>
+            </section>
+            <section class="view" id="alerts">
+                <h1>Alertas</h1>
+                <div class="cards" id="alertsBox"></div>
+            </section>
+            <section class="view" id="export">
+                <h1>Exportar</h1>
+                <div class="panel">
+                    <h2>Date Range Export</h2>
+                    <div class="form-grid"><label class="field">From<input type="date" id="fromDate"></label><label
+                            class="field">To<input type="date" id="toDate"></label></div><button class="btn"
+                        style="margin-top:18px" onclick="downloadCSV()">Download CSV</button>
+                </div>
+            </section>
+        </main>
+    </div>
+    <footer class="footer"><span>@pedrobaranzini</span><span>hello@reallygreatsite.com</span><span>Nogales, AZ</span>
+    </footer>
+    <script>
+        const starter = [{ lotId: "26M02-2", truck: "RB-10", grower: "M02", variety: "Honey Pop", cases: 1530, date: "2026-05-18", status: "Appeal", packaging: '"Illume" box clear bags', defects: ["Shattered berries", "Scars", "Less than 1/4 lb bunches"], notes: "Failed USDA. Appeal/reinspection planned." }, { lotId: "26M04-8", truck: "TC-33", grower: "M03", variety: "Flame", cases: 960, date: "2026-05-18", status: "Canada", packaging: 'Generic box, 10/2 Vista Vineyards clamshells', defects: ["Less than 1/4 lb bunches", "Straggly", "Damage by trimming", "Mixed bunch sizes", "Shattered berries"], notes: "Not appealing. Fruit will be sold in Canada." }];
+        function lots() { let x = localStorage.getItem("grapetrackLots"); if (!x) { localStorage.setItem("grapetrackLots", JSON.stringify(starter)); return starter } return JSON.parse(x) }
+        function saveLots(a) { localStorage.setItem("grapetrackLots", JSON.stringify(a)); renderAll() }
+        document.querySelectorAll(".side-link").forEach(a => a.onclick = () => { document.querySelectorAll(".side-link,.view").forEach(e => e.classList.remove("active")); a.classList.add("active"); document.getElementById(a.dataset.view).classList.add("active"); document.querySelector('.sidebar').classList.remove('open') })
+        let chart; function renderAll() {
+            const data = lots(); document.getElementById("kpis").innerHTML = [["Lots", data.length], ["Failed", data.filter(x => x.status != "Passed").length], ["Cases", data.reduce((s, x) => s + (+x.cases || 0), 0)], ["Growers", new Set(data.map(x => x.grower)).size]].map(k => `<div class="card"><div>${k[0]}</div><div class="num">${k[1]}</div></div>`).join("");
+            let rows = "<tr>" + ["Lot", "Truck", "Grower", "Variety", "Cases", "Status"].map(h => `<th onclick="sortTable('${h.toLowerCase()}')">${h}</th>`).join("") + "</tr>"; rows += data.map(x => `<tr><td>${x.lotId}</td><td>${x.truck}</td><td>${x.grower}</td><td>${x.variety}</td><td>${x.cases}</td><td><span class='status'>${x.status}</span></td></tr>`).join(""); document.getElementById("lotTable").innerHTML = rows;
+            renderCards(); renderAlerts(); renderChart(data)
+        }
+        function renderCards() { let q = (document.getElementById("filterLots")?.value || "").toLowerCase(); document.getElementById("lotCards").innerHTML = lots().filter(x => JSON.stringify(x).toLowerCase().includes(q)).map(x => `<div class="lot-card"><h2>${x.lotId}</h2><p><b>${x.variety}</b> · ${x.cases} cases</p><p>${x.truck} · ${x.grower}</p><p>${(x.defects || []).join(", ")}</p><span class="status">${x.status}</span></div>`).join("") }
+        document.getElementById("filterLots").oninput = renderCards;
+        function renderAlerts() { const failed = lots().filter(x => x.status != "Passed"); document.getElementById("alertsBox").innerHTML = failed.length > 1 ? `<div class="lot-card"><h2>Consecutive Failures</h2><p>${failed.length} active failed/appeal lots need attention.</p></div>` : `<div class="lot-card"><h2>No major alerts</h2><p>Only one or zero failed lots.</p></div>` }
+        function renderChart(data) { let counts = {}; data.forEach(l => (l.defects || []).forEach(d => counts[d] = (counts[d] || 0) + 1)); let ctx = document.getElementById("defectChart"); if (chart) chart.destroy(); chart = new Chart(ctx, { type: "bar", data: { labels: Object.keys(counts), datasets: [{ label: "Defects", data: Object.values(counts), backgroundColor: "#4a1020" }] }, options: { animation: { duration: 900 }, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true }, x: { ticks: { color: "#251015" } } } } }) }
+        document.getElementById("lotForm").onsubmit = e => { e.preventDefault(); let fd = new FormData(e.target); let obj = Object.fromEntries(fd.entries()); obj.defects = [...e.target.querySelectorAll("input[type=checkbox]:checked")].map(c => c.value); let a = lots(); a.push(obj); saveLots(a); e.target.reset(); document.getElementById("saveMsg").style.display = "block"; setTimeout(() => saveMsg.style.display = "none", 2200) }
+        function downloadCSV() { let data = lots().filter(x => { let f = document.getElementById("fromDate")?.value, t = document.getElementById("toDate")?.value; return (!f || x.date >= f) && (!t || x.date <= t) }); let keys = ["lotId", "truck", "grower", "variety", "cases", "date", "status", "packaging", "defects", "notes"]; let csv = [keys.join(",")].concat(data.map(x => keys.map(k => `"${(Array.isArray(x[k]) ? x[k].join("; ") : (x[k] || "")).toString().replaceAll('"', '""')}"`).join(","))).join("\n"); let a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" })); a.download = "grapetrack-lots.csv"; a.click() }
+        async function getAIInsights() { const out = document.getElementById("aiOutput"), err = document.getElementById("aiError"); out.style.display = err.style.display = "none"; try { const res = await fetch("https://api.anthropic.com/v1/messages", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 1000, messages: [{ role: "user", content: "Summarize USDA grape inspection issues from this JSON: " + JSON.stringify(lots()) }] }) }); if (!res.ok) throw new Error("API request failed. Add a secure backend proxy and API key before production use."); const data = await res.json(); out.textContent = data.content.filter(b => b.type === "text").map(b => b.text).join(""); out.style.display = "block" } catch (e) { err.textContent = e.message; err.style.display = "block" } }
+        function sortTable(k) { let map = { lot: "lotId" }; let key = map[k] || k; saveLots(lots().sort((a, b) => String(a[key] || "").localeCompare(String(b[key] || "")))) }
+        renderAll();
+    </script>
+</body>
+
+</html>
