@@ -15,11 +15,16 @@
             --card: #f6f2e8;
             --gray: #d6d6d3;
             --gold: #9a873f;
-            --ink: #251015
+            --ink: #251015;
+            --white: #fffdf7
         }
 
         * {
             box-sizing: border-box
+        }
+
+        html {
+            scroll-behavior: smooth
         }
 
         body {
@@ -42,14 +47,21 @@
             }
         }
 
-        @keyframes growBar {
+        @keyframes viewIn {
             from {
-                transform: scaleY(0)
+                opacity: 0;
+                transform: translateY(14px)
             }
 
             to {
-                transform: scaleY(1)
+                opacity: 1;
+                transform: translateY(0)
             }
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit
         }
 
         .top-nav {
@@ -69,7 +81,6 @@
             font-weight: 900;
             text-transform: uppercase;
             font-size: .8rem;
-            text-decoration: none;
             position: relative;
             transition: .3s ease
         }
@@ -103,8 +114,7 @@
         .sidebar {
             background: var(--burgundy);
             color: var(--cream);
-            padding: 28px 0;
-            position: relative
+            padding: 28px 0
         }
 
         .logo {
@@ -112,6 +122,11 @@
             font-size: 2.5rem;
             letter-spacing: -.08em;
             padding: 0 24px 30px
+        }
+
+        .logo span {
+            font-size: 1rem;
+            letter-spacing: 0
         }
 
         .side-link {
@@ -148,15 +163,18 @@
 
         .main {
             padding: 34px;
-            overflow: hidden
+            overflow: visible
         }
 
         .view {
-            display: none
+            display: none;
+            max-width: 1280px;
+            margin: 0 auto
         }
 
         .view.active {
-            display: block
+            display: block;
+            animation: viewIn .28s ease-out
         }
 
         h1 {
@@ -167,6 +185,13 @@
             color: var(--burgundy);
             margin: 0 0 26px;
             text-transform: uppercase
+        }
+
+        .sub {
+            max-width: 820px;
+            line-height: 1.6;
+            margin-top: -12px;
+            margin-bottom: 24px
         }
 
         .kpis {
@@ -181,7 +206,6 @@
             background: var(--card);
             border-radius: 26px;
             padding: 22px;
-            box-shadow: 0 0 0 rgba(0, 0, 0, 0);
             transition: transform .2s, box-shadow .2s
         }
 
@@ -205,7 +229,14 @@
             margin-top: 22px
         }
 
-        .panel h2 {
+        .grid3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px
+        }
+
+        .panel h2,
+        .lot-card h2 {
             font-family: "Arial Black", Impact, sans-serif;
             color: var(--burgundy);
             text-transform: uppercase;
@@ -236,15 +267,26 @@
             color: var(--burgundy);
             cursor: pointer;
             text-transform: uppercase;
-            font-size: .8rem;
+            font-size: .8rem
         }
 
         tr {
-            transition: background 0.15s;
+            transition: background-color .15s ease;
         }
 
         tr:hover {
             background: rgba(74, 16, 32, .08)
+        }
+
+        .table-link {
+            background: none;
+            border: 0;
+            color: var(--burgundy);
+            font-weight: 900;
+            text-decoration: underline;
+            cursor: pointer;
+            padding: 0;
+            font: inherit
         }
 
         .btn {
@@ -266,6 +308,11 @@
 
         .btn.secondary {
             background: var(--black)
+        }
+
+        .btn.light {
+            background: var(--cream);
+            color: var(--burgundy)
         }
 
         .form-grid {
@@ -339,6 +386,99 @@
             display: none
         }
 
+        .report-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 16px 0
+        }
+
+        .sheet-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            background: var(--burgundy);
+            color: var(--cream);
+            border-radius: 24px;
+            padding: 16px 18px;
+            margin-bottom: 16px
+        }
+
+        .sheet-toolbar strong {
+            font-family: "Arial Black", Impact, sans-serif;
+            text-transform: uppercase
+        }
+
+        .sheet-wrap {
+            overflow: auto;
+            border-radius: 22px;
+            border: 1px solid #d7d0c2;
+            background: white;
+            max-height: 60vh
+        }
+
+        .sheet {
+            min-width: 1120px;
+            border-collapse: collapse;
+            background: white
+        }
+
+        .sheet th {
+            position: sticky;
+            top: 0;
+            background: #eee9dd;
+            z-index: 2
+        }
+
+        .sheet td,
+        .sheet th {
+            border: 1px solid #ded8cb;
+            padding: 0
+        }
+
+        .sheet input,
+        .sheet select {
+            width: 100%;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+            padding: 12px;
+            min-width: 105px
+        }
+
+        .sheet select {
+            background: white
+        }
+
+        .sheet .row-number {
+            background: #f2eee3;
+            text-align: center;
+            font-weight: 900;
+            color: var(--burgundy);
+            width: 48px
+        }
+
+        .report-note {
+            background: var(--burgundy);
+            color: var(--cream);
+            border-radius: 26px;
+            padding: 22px;
+            margin-top: 20px
+        }
+
+        .mini-note {
+            background: rgba(255, 255, 255, .12);
+            border-radius: 18px;
+            padding: 14px;
+            margin-top: 10px
+        }
+
+        .export-preview {
+            margin-top: 22px
+        }
+
         .footer {
             background: var(--burgundy);
             color: var(--cream);
@@ -347,6 +487,80 @@
             gap: 18px;
             padding: 30px 34px;
             font-size: .9rem
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 10, 10, .62);
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 24px
+        }
+
+        .modal.open {
+            display: flex
+        }
+
+        .modal-card {
+            width: min(900px, 96vw);
+            max-height: 88vh;
+            overflow: auto;
+            background: var(--cream);
+            border-radius: 30px;
+            padding: 28px;
+            box-shadow: 0 24px 70px rgba(0, 0, 0, .35)
+        }
+
+        .modal-head {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 20px
+        }
+
+        .modal-head h2 {
+            font-family: "Arial Black", Impact, sans-serif;
+            font-size: clamp(2.2rem, 6vw, 5rem);
+            line-height: .85;
+            letter-spacing: -.06em;
+            color: var(--burgundy);
+            margin: 0;
+            text-transform: uppercase
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+            margin-top: 20px
+        }
+
+        .detail-item {
+            background: var(--card);
+            border-radius: 18px;
+            padding: 14px
+        }
+
+        .detail-item b {
+            display: block;
+            color: var(--burgundy);
+            text-transform: uppercase;
+            font-size: .75rem;
+            margin-bottom: 6px
+        }
+
+        .close-btn {
+            background: var(--black);
+            color: var(--cream);
+            border: 0;
+            border-radius: 999px;
+            width: 42px;
+            height: 42px;
+            font-weight: 900;
+            cursor: pointer
         }
 
         @media(max-width:900px) {
@@ -373,8 +587,10 @@
 
             .kpis,
             .grid2,
+            .grid3,
             .form-grid,
-            .cards {
+            .cards,
+            .detail-grid {
                 grid-template-columns: 1fr
             }
 
@@ -391,6 +607,10 @@
             .footer {
                 flex-direction: column
             }
+
+            .sheet-wrap {
+                max-height: 70vh
+            }
         }
     </style>
 </head>
@@ -401,14 +621,19 @@
     <button class="mobile-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">MENU</button>
     <div class="app">
         <aside class="sidebar">
-            <div class="logo">PBR<br><span style="font-size:1rem;letter-spacing:0">GrapeTrack</span></div>
-            <a class="side-link active" data-view="dash">Dashboard</a><a class="side-link" data-view="new">Nueva</a><a
-                class="side-link" data-view="lots">Lotes</a><a class="side-link" data-view="reports">Reportes</a><a
-                class="side-link" data-view="alerts">Alertas</a><a class="side-link" data-view="export">Exportar</a>
+            <div class="logo">PBR<br><span>GrapeTrack</span></div>
+            <a class="side-link active" data-view="dash">Dashboard</a>
+            <a class="side-link" data-view="new">Nueva</a>
+            <a class="side-link" data-view="lots">Lotes</a>
+            <a class="side-link" data-view="reports">Reportes</a>
+            <a class="side-link" data-view="alerts">Alertas</a>
+            <a class="side-link" data-view="export">Exportar</a>
         </aside>
-        <main class="main">
+        <main class="main" id="mainContent">
             <section class="view active" id="dash">
                 <h1>Dashboard</h1>
+                <p class="sub">Quick overview of USDA inspection lots, failed loads, cases, growers, and defect trends.
+                </p>
                 <div class="kpis" id="kpis"></div>
                 <div class="grid2">
                     <div class="panel">
@@ -416,92 +641,161 @@
                     </div>
                     <div class="panel">
                         <h2>Lots Table</h2>
-                        <table id="lotTable"></table><button class="btn" style="margin-top:16px" class="success"
-                            id="aiOutput">
+                        <table id="lotTable"></table><button class="btn" style="margin-top:16px"
+                            onclick="getAIInsights()">AI Insights</button>
+                        <div class="error" id="aiError"></div>
+                        <div class="success" id="aiOutput"></div>
                     </div>
                 </div>
-    </div>
-    </section>
-    <section class="view" id="new">
-        <h1>Nueva</h1>
-        <div class="panel">
-            <h2>New Inspection Lot</h2>
-            <form id="lotForm" class="form-grid">
-                <label class="field">Lot ID<input required name="lotId" placeholder="26M04-8"></label><label
-                    class="field">Truck<input name="truck" placeholder="TC-33"></label><label class="field">Grower<input
-                        name="grower" placeholder="M03"></label><label class="field">Variety<input name="variety"
-                        placeholder="Flame"></label><label class="field">Cases<input type="number" name="cases"
-                        placeholder="960"></label><label class="field">Date<input type="date" name="date"></label><label
-                    class="field">Status<select name="status">
-                        <option>Passed</option>
-                        <option>Failed</option>
-                        <option>Appeal</option>
-                        <option>Canada/etc?</option>
-                    </select></label><label class="field">Packaging<input name="packaging"
-                        placeholder='10/2 "Vista Vineyards" clamshell'></label>
-                <div class="field" style="grid-column:1/-1">Defects<div class="checks"><label><input type="checkbox"
-                                value="Shattered berries"> Shattered
-                            berries</label><label><input type="checkbox" value="Scars">
-                            Scars</label><label><input type="checkbox" value="Less than 1/4 lb bunches"> Less
-                            than 1/4 lb bunches</label><label><input type="checkbox" value="Straggly">
-                            Straggly</label><label><input type="checkbox" value="Damage by trimming"> Damage by
-                            trimming</label><label><input type="checkbox" value="Mixed bunch sizes"> Mixed bunch
-                            sizes</label></div>
+            </section>
+            <section class="view" id="new">
+                <h1>Nueva</h1>
+                <div class="panel">
+                    <h2>New Inspection Lot</h2>
+                    <form id="lotForm" class="form-grid">
+                        <label class="field">Lot ID<input required name="lotId" placeholder="26M04-8"></label>
+                        <label class="field">Truck<input name="truck" placeholder="TC-33"></label>
+                        <label class="field">Grower<input name="grower" placeholder="M03"></label>
+                        <label class="field">Variety<input name="variety" placeholder="Flame"></label>
+                        <label class="field">Cases<input type="number" name="cases" placeholder="960"></label>
+                        <label class="field">Date<input type="date" name="date"></label>
+                        <label class="field">Status<select name="status">
+                                <option>Passed</option>
+                                <option>Failed</option>
+                                <option>Appeal</option>
+                                <option>Canada</option>
+                            </select></label>
+                        <label class="field">Packaging<input name="packaging"
+                                placeholder='10/2 "Vista Vineyards" clamshell'></label>
+                        <div class="field" style="grid-column:1/-1">Defects
+                            <div class="checks">
+                                <label><input type="checkbox" value="Shattered berries"> Shattered berries</label>
+                                <label><input type="checkbox" value="Scars"> Scars</label>
+                                <label><input type="checkbox" value="Less than 1/4 lb bunches"> Less than 1/4 lb
+                                    bunches</label>
+                                <label><input type="checkbox" value="Straggly"> Straggly</label>
+                                <label><input type="checkbox" value="Damage by trimming"> Damage by trimming</label>
+                                <label><input type="checkbox" value="Mixed bunch sizes"> Mixed bunch sizes</label>
+                            </div>
+                        </div>
+                        <label class="field" style="grid-column:1/-1">Notes<textarea name="notes"></textarea></label>
+                        <button class="btn" type="submit">Save Lot</button>
+                    </form>
+                    <div id="saveMsg" class="success">Lot saved in localStorage.</div>
                 </div>
-                <label class="field" style="grid-column:1/-1">Notes<textarea name="notes"></textarea></label><button
-                    class="btn" type="submit">Save Lot</button>
-            </form>
-            <div id="saveMsg" class="success">Lot saved in localStorage.</div>
-        </div>
-    </section>
-    <section class="view" id="lots">
-        <h1>Lotes</h1><input id="filterLots" placeholder="Filter lots..." style="width:100%;margin-bottom:20px">
-        <div class="cards" id="lotCards"></div>
-    </section>
-    <section class="view" id="reports">
-        <h1>Reportes</h1>
-        <div class="panel">
-            <h2>Report Builder</h2>
-            <p>Select a lot from LOTES, then use the notes and defect summary to write USDA inspection reports.
-            </p><button class="btn" onclick="downloadCSV()">Download All Lots CSV</button>
-        </div>
-    </section>
-    <section class="view" id="alerts">
-        <h1>Alertas</h1>
-        <div class="cards" id="alertsBox"></div>
-    </section>
-    <section class="view" id="export">
-        <h1>Exportar</h1>
-        <div class="panel">
-            <h2>Date Range Export</h2>
-            <div class="form-grid"><label class="field">From<input type="date" id="fromDate"></label><label
-                    class="field">To<input type="date" id="toDate"></label></div><button class="btn"
-                style="margin-top:18px" onclick="downloadCSV()">Download CSV</button>
-        </div>
-    </section>
-    </main>
+            </section>
+            <section class="view" id="lots">
+                <h1>Lotes</h1>
+                <input id="filterLots" placeholder="Filter lots..." style="width:100%;margin-bottom:20px">
+                <div class="cards" id="lotCards"></div>
+            </section>
+            <section class="view" id="reports">
+                <h1>Reportes</h1>
+                <p class="sub">Excel-style report inside the dashboard. Edit the sheet here, save it, and export it as
+                    CSV or Excel.</p>
+                <div class="grid3">
+                    <div class="card">
+                        <div>Total rows</div>
+                        <div class="num" id="reportRows">0</div>
+                    </div>
+                    <div class="card">
+                        <div>Failed / Appeal</div>
+                        <div class="num" id="reportFails">0</div>
+                    </div>
+                    <div class="card">
+                        <div>Total cases</div>
+                        <div class="num" id="reportCases">0</div>
+                    </div>
+                </div>
+                <div class="panel" style="margin-top:22px">
+                    <h2>Inspection Report Sheet</h2>
+                    <div id="reportSheetTools"></div>
+                    <div class="sheet-wrap">
+                        <table class="sheet" id="reportSheet"></table>
+                    </div>
+                </div>
+                <div class="report-note">
+                    <h2 style="color:var(--cream);margin:0 0 8px">Report Tips</h2>
+                    <div class="mini-note">This works like a simple spreadsheet. You can edit every cell before
+                        exporting.</div>
+                    <div class="mini-note">For failed lots, keep the main defect and the action clear: appeal,
+                        reinspection, return, sell Canada, or release.</div>
+                </div>
+            </section>
+            <section class="view" id="alerts">
+                <h1>Alertas</h1>
+                <div class="cards" id="alertsBox"></div>
+            </section>
+            <section class="view" id="export">
+                <h1>Exportar</h1>
+                <p class="sub">Choose a date range, preview the spreadsheet, then export exactly what you see.</p>
+                <div class="panel">
+                    <h2>Date Range Export</h2>
+                    <div class="form-grid"><label class="field">From<input type="date" id="fromDate"
+                                onchange="renderExportPreview()"></label><label class="field">To<input type="date"
+                                id="toDate" onchange="renderExportPreview()"></label></div>
+                    <div class="report-actions"><button class="btn" onclick="downloadCSV()">Export Lots
+                            CSV</button><button class="btn secondary" onclick="downloadReportCSV()">Export Sheet
+                            CSV</button><button class="btn" onclick="downloadReportExcel()">Export Sheet Excel</button>
+                    </div>
+                </div>
+                <div class="panel export-preview">
+                    <h2>Live Spreadsheet Preview</h2>
+                    <div class="sheet-wrap">
+                        <table class="sheet" id="exportPreview"></table>
+                    </div>
+                </div>
+            </section>
+        </main>
     </div>
     <footer class="footer"><span>@pedrobaranzini</span><span>hello@reallygreatsite.com</span><span>Nogales, AZ</span>
     </footer>
+    <div class="modal" id="lotModal" onclick="if(event.target.id==='lotModal')closeLotModal()">
+        <div class="modal-card">
+            <div class="modal-head">
+                <h2 id="modalTitle">Lot</h2><button class="close-btn" onclick="closeLotModal()">×</button>
+            </div>
+            <div id="modalBody"></div>
+        </div>
+    </div>
     <script>
         const starter = [{ lotId: "26M02-2", truck: "RB-10", grower: "M02", variety: "Honey Pop", cases: 1530, date: "2026-05-18", status: "Appeal", packaging: '"Illume" box clear bags', defects: ["Shattered berries", "Scars", "Less than 1/4 lb bunches"], notes: "Failed USDA. Appeal/reinspection planned." }, { lotId: "26M04-8", truck: "TC-33", grower: "M03", variety: "Flame", cases: 960, date: "2026-05-18", status: "Canada", packaging: 'Generic box, 10/2 Vista Vineyards clamshells', defects: ["Less than 1/4 lb bunches", "Straggly", "Damage by trimming", "Mixed bunch sizes", "Shattered berries"], notes: "Not appealing. Fruit will be sold in Canada." }];
+        const sheetHeaders = ["Lot ID", "Date", "Truck", "Grower", "Variety", "Cases", "USDA Status", "Main Defect", "Action", "Notes"];
         function lots() { let x = localStorage.getItem("grapetrackLots"); if (!x) { localStorage.setItem("grapetrackLots", JSON.stringify(starter)); return starter } return JSON.parse(x) }
         function saveLots(a) { localStorage.setItem("grapetrackLots", JSON.stringify(a)); renderAll() }
-        document.querySelectorAll(".side-link").forEach(a => a.onclick = () => { document.querySelectorAll(".side-link,.view").forEach(e => e.classList.remove("active")); a.classList.add("active"); document.getElementById(a.dataset.view).classList.add("active"); document.querySelector('.sidebar').classList.remove('open') })
-        let chart; function renderAll() {
-            const data = lots(); document.getElementById("kpis").innerHTML = [["Lots", data.length], ["Failed", data.filter(x => x.status != "Passed").length], ["Cases", data.reduce((s, x) => s + (+x.cases || 0), 0)], ["Growers", new Set(data.map(x => x.grower)).size]].map(k => `<div class="card"><div>${k[0]}</div><div class="num">${k[1]}</div></div>`).join("");
-            let rows = "<tr>" + ["Lot", "Truck", "Grower", "Variety", "Cases", "Status"].map(h => `<th onclick="sortTable('${h.toLowerCase()}')">${h}</th>`).join("") + "</tr>"; rows += data.map(x => `<tr><td>${x.lotId}</td><td>${x.truck}</td><td>${x.grower}</td><td>${x.variety}</td><td>${x.cases}</td><td><span class='status'>${x.status}</span></td></tr>`).join(""); document.getElementById("lotTable").innerHTML = rows;
-            renderCards(); renderAlerts(); renderChart(data)
-        }
-        function renderCards() { let q = (document.getElementById("filterLots")?.value || "").toLowerCase(); document.getElementById("lotCards").innerHTML = lots().filter(x => JSON.stringify(x).toLowerCase().includes(q)).map(x => `<div class="lot-card"><h2>${x.lotId}</h2><p><b>${x.variety}</b> · ${x.cases} cases</p><p>${x.truck} · ${x.grower}</p><p>${(x.defects || []).join(", ")}</p><span class="status">${x.status}</span></div>`).join("") }
+        function escapeHtml(s) { return String(s ?? "").replace(/[&<>"]/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[m])) }
+        function switchView(id) { document.querySelectorAll(".side-link,.view").forEach(e => e.classList.remove("active")); document.querySelector(`.side-link[data-view="${id}"]`)?.classList.add("active"); document.getElementById(id).classList.add("active"); document.querySelector('.sidebar').classList.remove('open'); document.getElementById('mainContent').scrollTop = 0; window.scrollTo({ top: 0, behavior: 'smooth' }); if (id === "reports") renderReportSheet(); if (id === "export") renderExportPreview() }
+        document.querySelectorAll(".side-link").forEach(a => a.onclick = () => switchView(a.dataset.view));
+        let chart;
+        function renderAll() { const data = lots(); document.getElementById("kpis").innerHTML = [["Lots", data.length], ["Failed", data.filter(x => x.status !== "Passed").length], ["Cases", data.reduce((s, x) => s + (+x.cases || 0), 0)], ["Growers", new Set(data.map(x => x.grower)).size]].map(k => `<div class="card"><div>${k[0]}</div><div class="num">${k[1]}</div></div>`).join(""); let rows = "<tr>" + ["Lot", "Truck", "Grower", "Variety", "Cases", "Status", "Details"].map(h => `<th onclick="sortTable('${h.toLowerCase()}')">${h}</th>`).join("") + "</tr>"; rows += data.map((x, i) => `<tr><td><button class="table-link" onclick="openLotModal(${i})">${escapeHtml(x.lotId)}</button></td><td>${escapeHtml(x.truck)}</td><td>${escapeHtml(x.grower)}</td><td>${escapeHtml(x.variety)}</td><td>${escapeHtml(x.cases)}</td><td><span class='status'>${escapeHtml(x.status)}</span></td><td><button class="btn light" onclick="openLotModal(${i})">View all</button></td></tr>`).join(""); document.getElementById("lotTable").innerHTML = rows; renderCards(); renderAlerts(); renderChart(data); renderReportStats(); renderExportPreview() }
+        function openLotModal(i) { const x = lots()[i]; if (!x) return; document.getElementById('modalTitle').textContent = x.lotId || 'Lot details'; const action = x.status === "Canada" ? "Sell Canada" : x.status === "Appeal" ? "Appeal / reinspection" : x.status === "Failed" ? "Review / reinspection" : "Release"; const items = [["Lot ID", x.lotId], ["Date", x.date], ["Truck", x.truck], ["Grower", x.grower], ["Variety", x.variety], ["Cases", x.cases], ["USDA Status", x.status], ["Packaging", x.packaging], ["Defects", (x.defects || []).join(', ') || 'None listed'], ["Recommended Action", action], ["Notes", x.notes || 'No notes']]; document.getElementById('modalBody').innerHTML = '<div class="detail-grid">' + items.map(([k, v]) => `<div class="detail-item"><b>${escapeHtml(k)}</b>${escapeHtml(v)}</div>`).join('') + '</div>'; document.getElementById('lotModal').classList.add('open') }
+        function closeLotModal() { document.getElementById('lotModal').classList.remove('open') }
+        function renderCards() { let q = (document.getElementById("filterLots")?.value || "").toLowerCase(); document.getElementById("lotCards").innerHTML = lots().filter(x => JSON.stringify(x).toLowerCase().includes(q)).map((x, i) => `<div class="lot-card"><h2>${escapeHtml(x.lotId)}</h2><p><b>${escapeHtml(x.variety)}</b> · ${escapeHtml(x.cases)} cases</p><p>${escapeHtml(x.truck)} · ${escapeHtml(x.grower)}</p><p>${escapeHtml((x.defects || []).join(", "))}</p><span class="status">${escapeHtml(x.status)}</span><br><button class="btn" style="margin-top:16px" onclick="openLotModal(${i})">View full lot</button></div>`).join("") }
         document.getElementById("filterLots").oninput = renderCards;
-        function renderAlerts() { const failed = lots().filter(x => x.status != "Passed"); document.getElementById("alertsBox").innerHTML = failed.length > 1 ? `<div class="lot-card"><h2>Consecutive Failures</h2><p>${failed.length} active failed/appeal lots need attention.</p></div>` : `<div class="lot-card"><h2>No major alerts</h2><p>Only one or zero failed lots.</p></div>` }
+        function renderAlerts() { const failed = lots().filter(x => x.status !== "Passed"); document.getElementById("alertsBox").innerHTML = failed.length > 1 ? `<div class="lot-card"><h2>Consecutive Failures</h2><p>${failed.length} active failed/appeal lots need attention.</p></div>` : `<div class="lot-card"><h2>No major alerts</h2><p>Only one or zero failed lots.</p></div>` }
         function renderChart(data) { let counts = {}; data.forEach(l => (l.defects || []).forEach(d => counts[d] = (counts[d] || 0) + 1)); let ctx = document.getElementById("defectChart"); if (chart) chart.destroy(); chart = new Chart(ctx, { type: "bar", data: { labels: Object.keys(counts), datasets: [{ label: "Defects", data: Object.values(counts), backgroundColor: "#4a1020" }] }, options: { animation: { duration: 900 }, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true }, x: { ticks: { color: "#251015" } } } } }) }
-        document.getElementById("lotForm").onsubmit = e => { e.preventDefault(); let fd = new FormData(e.target); let obj = Object.fromEntries(fd.entries()); obj.defects = [...e.target.querySelectorAll("input[type=checkbox]:checked")].map(c => c.value); let a = lots(); a.push(obj); saveLots(a); e.target.reset(); document.getElementById("saveMsg").style.display = "block"; setTimeout(() => saveMsg.style.display = "none", 2200) }
+        document.getElementById("lotForm").onsubmit = e => { e.preventDefault(); let fd = new FormData(e.target); let obj = Object.fromEntries(fd.entries()); obj.defects = [...e.target.querySelectorAll("input[type=checkbox]:checked")].map(c => c.value); let a = lots(); a.push(obj); saveLots(a); syncSheetFromLots(false); e.target.reset(); document.getElementById("saveMsg").style.display = "block"; setTimeout(() => document.getElementById("saveMsg").style.display = "none", 2200) };
+        function getSheet() { return JSON.parse(localStorage.getItem("grapetrackReportSheet") || "[]") }
+        function setSheet(rows) { localStorage.setItem("grapetrackReportSheet", JSON.stringify(rows)); renderReportSheet(); renderReportStats(); renderExportPreview() }
+        function lotsToSheetRows(data = lots()) { return data.map(x => [x.lotId, x.date, x.truck, x.grower, x.variety, x.cases, x.status, (x.defects || [])[0] || "", x.status === "Canada" ? "Sell Canada" : x.status === "Appeal" ? "Appeal" : x.status === "Failed" ? "Review" : "Release", x.notes || ""]) }
+        function syncSheetFromLots(force = true) { if (force || !getSheet().length) setSheet(lotsToSheetRows()) }
+        function loadLotsToSheet() { setSheet(lotsToSheetRows()) }
+        function addReportRow() { const rows = getSheet(); rows.push(["", "", "", "", "", "", "Pending", "", "", ""]); setSheet(rows) }
+        function deleteLastRow() { const rows = getSheet(); rows.pop(); setSheet(rows) }
+        function reportTools() { return `<div class="sheet-toolbar"><strong>Live Spreadsheet</strong><div class="report-actions"><button class="btn light" onclick="addReportRow()">Add row</button><button class="btn light" onclick="saveReportSheet()">Save</button><button class="btn light" onclick="loadLotsToSheet()">Load lots data</button><button class="btn light" onclick="deleteLastRow()">Delete last row</button><button class="btn light" onclick="downloadReportCSV()">CSV</button><button class="btn light" onclick="downloadReportExcel()">Excel</button></div></div>` }
+        function renderReportSheet() { document.getElementById('reportSheetTools').innerHTML = reportTools(); let rows = getSheet(); if (!rows.length) { rows = lotsToSheetRows(); localStorage.setItem("grapetrackReportSheet", JSON.stringify(rows)); } let html = "<tr><th class='row-number'>#</th>" + sheetHeaders.map(h => `<th>${h}</th>`).join("") + "</tr>"; html += rows.map((r, i) => `<tr><td class="row-number">${i + 1}</td>` + sheetHeaders.map((h, j) => `<td><input data-r="${i}" data-c="${j}" value="${escapeHtml(r[j] || "")}"></td>`).join("") + "</tr>").join(""); document.getElementById("reportSheet").innerHTML = html; document.querySelectorAll("#reportSheet input").forEach(inp => inp.oninput = saveReportSheetSoft); renderReportStats() }
+        function saveReportSheetSoft() { let rows = getSheet(); document.querySelectorAll("#reportSheet input").forEach(inp => { if (!rows[inp.dataset.r]) rows[inp.dataset.r] = []; rows[inp.dataset.r][inp.dataset.c] = inp.value }); localStorage.setItem("grapetrackReportSheet", JSON.stringify(rows)); renderReportStats(); renderExportPreview() }
+        function saveReportSheet() { saveReportSheetSoft(); alert("Report sheet saved.") }
+        function renderReportStats() { const rows = getSheet(); if (document.getElementById("reportRows")) { document.getElementById("reportRows").textContent = rows.length; document.getElementById("reportFails").textContent = rows.filter(r => String(r[6]).toLowerCase().includes("fail") || String(r[6]).toLowerCase().includes("appeal") || String(r[6]).toLowerCase().includes("canada")).length; document.getElementById("reportCases").textContent = rows.reduce((s, r) => s + (+r[5] || 0), 0) } }
+        function rowsForDateRange() { let f = document.getElementById("fromDate")?.value, t = document.getElementById("toDate")?.value; return lotsToSheetRows(lots().filter(x => (!f || x.date >= f) && (!t || x.date <= t))) }
+        function renderExportPreview() { const el = document.getElementById('exportPreview'); if (!el) return; const rows = rowsForDateRange(); let html = "<tr><th class='row-number'>#</th>" + sheetHeaders.map(h => `<th>${h}</th>`).join("") + "</tr>"; html += rows.map((r, i) => `<tr><td class="row-number">${i + 1}</td>` + r.map(v => `<td style="padding:12px">${escapeHtml(v)}</td>`).join('') + '</tr>').join(''); el.innerHTML = html }
+        function csvFromRows(rows, headers) { return [headers.join(",")].concat(rows.map(r => headers.map((_, i) => `"${String(r[i] || "").replaceAll('"', '""')}"`).join(","))).join("\n") }
+        function downloadReportCSV() { saveReportSheetSoft(); let a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csvFromRows(getSheet(), sheetHeaders)], { type: "text/csv" })); a.download = "grapetrack-report-sheet.csv"; a.click() }
+        function downloadReportExcel() { saveReportSheetSoft(); let rows = getSheet(); let html = '<table><tr>' + sheetHeaders.map(h => `<th>${escapeHtml(h)}</th>`).join('') + '</tr>' + rows.map(r => '<tr>' + sheetHeaders.map((_, i) => `<td>${escapeHtml(r[i] || '')}</td>`).join('') + '</tr>').join('') + '</table>'; let a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([html], { type: 'application/vnd.ms-excel' })); a.download = 'grapetrack-report-sheet.xls'; a.click() }
         function downloadCSV() { let data = lots().filter(x => { let f = document.getElementById("fromDate")?.value, t = document.getElementById("toDate")?.value; return (!f || x.date >= f) && (!t || x.date <= t) }); let keys = ["lotId", "truck", "grower", "variety", "cases", "date", "status", "packaging", "defects", "notes"]; let csv = [keys.join(",")].concat(data.map(x => keys.map(k => `"${(Array.isArray(x[k]) ? x[k].join("; ") : (x[k] || "")).toString().replaceAll('"', '""')}"`).join(","))).join("\n"); let a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" })); a.download = "grapetrack-lots.csv"; a.click() }
         async function getAIInsights() { const out = document.getElementById("aiOutput"), err = document.getElementById("aiError"); out.style.display = err.style.display = "none"; try { const res = await fetch("https://api.anthropic.com/v1/messages", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 1000, messages: [{ role: "user", content: "Summarize USDA grape inspection issues from this JSON: " + JSON.stringify(lots()) }] }) }); if (!res.ok) throw new Error("API request failed. Add a secure backend proxy and API key before production use."); const data = await res.json(); out.textContent = data.content.filter(b => b.type === "text").map(b => b.text).join(""); out.style.display = "block" } catch (e) { err.textContent = e.message; err.style.display = "block" } }
-        function sortTable(k) { let map = { lot: "lotId" }; let key = map[k] || k; saveLots(lots().sort((a, b) => String(a[key] || "").localeCompare(String(b[key] || "")))) }
-        renderAll();
+        function sortTable(k) { if (k === 'details') return; let map = { lot: "lotId" }; let key = map[k] || k; saveLots(lots().sort((a, b) => String(a[key] || "").localeCompare(String(b[key] || "")))) }
+        renderAll(); renderReportSheet();
     </script>
 </body>
 
