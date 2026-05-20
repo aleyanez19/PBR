@@ -5,17 +5,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>About Vista</title>
+
     <style>
         :root {
             --black: #0a0a0a;
             --burgundy: #4a1020;
             --cream: #e8e4d9;
             --gray: #d6d6d3;
-            --ink: #251015
+            --ink: #251015;
         }
 
         * {
-            box-sizing: border-box
+            box-sizing: border-box;
         }
 
         body {
@@ -23,24 +24,24 @@
             font-family: Arial, Helvetica, sans-serif;
             background: var(--cream);
             color: var(--ink);
-            animation: pageIn .5s ease-out
+            animation: pageIn .5s ease-out;
         }
 
         @keyframes pageIn {
             from {
                 opacity: 0;
-                transform: translateY(20px)
+                transform: translateY(20px);
             }
 
             to {
                 opacity: 1;
-                transform: translateY(0)
+                transform: translateY(0);
             }
         }
 
         a {
             text-decoration: none;
-            color: inherit
+            color: inherit;
         }
 
         .top-nav {
@@ -51,7 +52,7 @@
             display: flex;
             justify-content: center;
             gap: 38px;
-            padding: 20px
+            padding: 20px;
         }
 
         .top-nav a {
@@ -60,7 +61,7 @@
             color: var(--cream);
             font-size: .8rem;
             position: relative;
-            transition: .3s
+            transition: .3s;
         }
 
         .top-nav a:after {
@@ -71,16 +72,16 @@
             width: 0;
             height: 2px;
             background: var(--burgundy);
-            transition: .3s
+            transition: .3s;
         }
 
         .top-nav a:hover {
-            color: #fff
+            color: #fff;
         }
 
         .top-nav a:hover:after,
         .top-nav a.active:after {
-            width: 100%
+            width: 100%;
         }
 
         .hero {
@@ -92,7 +93,7 @@
             grid-template-columns: 1.3fr .7fr;
             gap: 50px;
             align-items: center;
-            position: relative
+            position: relative;
         }
 
         .hero:after {
@@ -102,7 +103,7 @@
             left: 0;
             right: 0;
             height: 12vh;
-            background: var(--burgundy)
+            background: var(--burgundy);
         }
 
         h1 {
@@ -111,7 +112,9 @@
             letter-spacing: -.07em;
             line-height: .85;
             margin: 0;
-            text-transform: uppercase
+            text-transform: uppercase;
+            position: relative;
+            z-index: 2;
         }
 
         .logoMark {
@@ -121,21 +124,10 @@
             border-radius: 50%;
             width: 88px;
             height: 88px;
-            font: 900 1.2rem Arial;
             margin-left: 16px;
-            vertical-align: middle
-        }
-
-        p {
-            line-height: 1.5
-        }
-
-        .imgbox img,
-        .photo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
+            vertical-align: middle;
+            overflow: hidden;
+            background: transparent;
         }
 
         .logoMark img {
@@ -144,45 +136,65 @@
             display: block;
         }
 
-        .logoLarge img {
-            width: 110px;
-            height: auto;
+        p {
+            line-height: 1.5;
+            position: relative;
+            z-index: 2;
+        }
+
+        .imgbox {
+            min-height: 420px;
+            border: 4px solid var(--cream);
+            background: var(--burgundy);
+            padding: 0;
+            overflow: hidden;
+            position: relative;
+            z-index: 2;
+        }
+
+        .imgbox img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
             display: block;
         }
 
         .film {
             height: 70px;
             background: repeating-linear-gradient(90deg, var(--cream) 0 38px, var(--burgundy) 38px 78px);
-            border-bottom: 35px solid var(--burgundy)
+            border-bottom: 35px solid var(--burgundy);
         }
 
         .scrap {
             background: var(--burgundy);
             display: grid;
             grid-template-columns: 1fr 1fr;
-            min-height: 76vh
+            min-height: 76vh;
         }
 
         .photo {
             background: #ddd;
-            display: grid;
-            place-items: center;
-            font-weight: 900;
-            color: var(--burgundy);
+            overflow: hidden;
             filter: grayscale(1);
-            font-size: 1.1rem
+        }
+
+        .photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
 
         .papers {
             position: relative;
             background: var(--burgundy);
-            overflow: hidden
+            overflow: hidden;
         }
 
         .paper {
             position: absolute;
             background: #e8d7ad;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, .16)
+            box-shadow: 0 12px 30px rgba(0, 0, 0, .16);
         }
 
         .paper.one {
@@ -190,7 +202,7 @@
             height: 210px;
             top: 100px;
             left: 90px;
-            transform: rotate(-8deg)
+            transform: rotate(-8deg);
         }
 
         .paper.two {
@@ -200,7 +212,7 @@
             left: 280px;
             background: #f0efe8;
             transform: rotate(6deg);
-            background-image: repeating-linear-gradient(0deg, transparent 0 28px, #aec2d7 29px 30px)
+            background-image: repeating-linear-gradient(0deg, transparent 0 28px, #aec2d7 29px 30px);
         }
 
         .logoLarge {
@@ -214,7 +226,14 @@
             height: 130px;
             display: grid;
             place-items: center;
-            font-weight: 900
+            font-weight: 900;
+            overflow: hidden;
+        }
+
+        .logoLarge img {
+            width: 105px;
+            height: auto;
+            display: block;
         }
 
         .contact {
@@ -222,24 +241,24 @@
             padding: 70px 7vw;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 50px
+            gap: 50px;
         }
 
         .contact h2 {
             font-family: "Arial Black", Impact, sans-serif;
             font-size: clamp(3.5rem, 8vw, 8rem);
             letter-spacing: -.07em;
-            margin: 0
+            margin: 0;
         }
 
         .contact form {
             display: flex;
             flex-direction: column;
-            gap: 18px
+            gap: 18px;
         }
 
         .contact label {
-            font-weight: 900
+            font-weight: 900;
         }
 
         .contact input,
@@ -247,11 +266,11 @@
             border: 0;
             background: #fff;
             padding: 15px;
-            font: inherit
+            font: inherit;
         }
 
         .contact textarea {
-            min-height: 160px
+            min-height: 160px;
         }
 
         .btn {
@@ -263,12 +282,12 @@
             font-weight: 900;
             text-transform: uppercase;
             transition: .25s;
-            cursor: pointer
+            cursor: pointer;
         }
 
         .btn:hover {
             background: var(--black);
-            transform: scale(1.03)
+            transform: scale(1.03);
         }
 
         .footer {
@@ -278,7 +297,7 @@
             justify-content: space-between;
             gap: 18px;
             padding: 30px 7vw;
-            font-size: .9rem
+            font-size: .9rem;
         }
 
         @media(max-width:850px) {
@@ -286,24 +305,24 @@
             .hero,
             .scrap,
             .contact {
-                grid-template-columns: 1fr
+                grid-template-columns: 1fr;
             }
 
             .top-nav {
                 flex-wrap: wrap;
-                gap: 16px
+                gap: 16px;
             }
 
             .footer {
-                flex-direction: column
+                flex-direction: column;
             }
 
             .paper.one {
-                left: 30px
+                left: 30px;
             }
 
             .paper.two {
-                left: 110px
+                left: 110px;
             }
         }
     </style>
@@ -351,6 +370,7 @@
         <div class="papers">
             <div class="paper one"></div>
             <div class="paper two"></div>
+
             <div class="logoLarge">
                 <img src="assets/logovistas.svg" alt="Vista logo">
             </div>
@@ -369,8 +389,10 @@
     </section>
 
     <footer class="footer">
-        <span>@pedrobaranzini</span>
+        <span>pbaranzini@vistavineyards.com</span>
         <span>Made by AYZ</span>
         <span>License MT</span>
     </footer>
 </body>
+
+</html>

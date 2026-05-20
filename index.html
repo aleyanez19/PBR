@@ -26,7 +26,6 @@
 
         body {
             margin: 0;
-            padding-bottom: 78px;
             font-family: Arial, Helvetica, sans-serif;
             background: var(--cream);
             color: var(--ink);
@@ -89,7 +88,6 @@
             color: var(--cream);
             font-weight: 900;
             text-transform: uppercase;
-            text-decoration: none;
             font-size: .8rem;
             position: relative;
             transition: .3s;
@@ -119,7 +117,7 @@
             min-height: 100vh;
             background: var(--black);
             color: var(--cream);
-            padding: 70px 7vw 120px;
+            padding: 70px 7vw 80px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -277,29 +275,18 @@
             line-height: 1.5;
         }
 
-        /* FOOTER ALWAYS FIXED AT BOTTOM */
         .footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
             background: var(--burgundy);
             color: var(--cream);
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 18px;
-            padding: 22px 7vw;
+            padding: 30px 7vw;
             font-size: .9rem;
-            z-index: 80;
-            box-shadow: 0 -8px 20px rgba(0, 0, 0, .18);
         }
 
         @media(max-width: 850px) {
-            body {
-                padding-bottom: 120px;
-            }
-
             .hero-top {
                 flex-direction: column;
             }
@@ -322,7 +309,6 @@
             .footer {
                 flex-direction: column;
                 align-items: flex-start;
-                padding: 18px 7vw;
             }
 
             .hero-title {
@@ -393,8 +379,8 @@
             </p>
 
             <p>
-                También está diseñado para funcionar como una herramienta tipo Notion: simple,
-                visual, directa y fácil de usar para el trabajo diario en uvas.
+                También está diseñado para funcionar como una herramienta tipo Notion, y si te gusta podemos agregarle
+                mas bases de datos para que tomes notas como diario
             </p>
 
             <a class="btn" href="dashboard.html">Open Dashboard</a>
@@ -427,8 +413,8 @@
     </section>
 
     <footer class="footer">
-        <span>@pedrobaranzini</span>
-        <span>hello@reallygreatsite.com</span>
+        <span>pbaranzini@vistavineyards.com</span>
+        <span>pedro_baranzini@fresnostate.edu</span>
         <span>License MT · Made by AYZ</span>
     </footer>
 </body>
