@@ -220,13 +220,11 @@
             bottom: 80px;
             left: 150px;
             border: 5px solid var(--cream);
-            color: var(--cream);
             border-radius: 50%;
             width: 130px;
             height: 130px;
             display: grid;
             place-items: center;
-            font-weight: 900;
             overflow: hidden;
         }
 
@@ -271,6 +269,7 @@
 
         .contact textarea {
             min-height: 160px;
+            resize: vertical;
         }
 
         .btn {
@@ -348,7 +347,7 @@
             <h1>
                 About Vista
                 <span class="logoMark">
-                    <img src="assets/logovistas.svg" alt="Vista logo">
+                    <img src="assets/logovistas.jpg" alt="Vista logo">
                 </span>
             </h1>
 
@@ -356,7 +355,7 @@
         </div>
 
         <div class="imgbox">
-            <img src="assets/uvasmoradas.jpg" alt="Uvas moradas">
+            <img src="assets/uvas.jpg" alt="Uvas moradas">
         </div>
     </section>
 
@@ -372,7 +371,7 @@
             <div class="paper two"></div>
 
             <div class="logoLarge">
-                <img src="assets/logovistas.svg" alt="Vista logo">
+                <img src="assets/logovistas.jpg" alt="Vista logo">
             </div>
         </div>
     </section>
@@ -380,19 +379,46 @@
     <section class="contact">
         <h2>Contact</h2>
 
-        <form>
+        <form id="contactForm">
             <label>Reach out</label>
-            <input placeholder="Name">
-            <textarea placeholder="Message"></textarea>
-            <button class="btn" type="button">Send</button>
+
+            <input id="nameInput" type="text" placeholder="Name" required>
+
+            <input id="emailInput" type="email" placeholder="Your email" required>
+
+            <textarea id="messageInput" placeholder="Message" required></textarea>
+
+            <button class="btn" type="submit">Send Message</button>
         </form>
     </section>
 
     <footer class="footer">
+        <span>@pedrobaranzini</span>
         <span>pbaranzini@vistavineyards.com</span>
-        <span>Made by AYZ</span>
-        <span>License MT</span>
+        <span>License MT · Made by AYZ</span>
     </footer>
+
+    <script>
+        document.getElementById("contactForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const name = document.getElementById("nameInput").value.trim();
+            const email = document.getElementById("emailInput").value.trim();
+            const message = document.getElementById("messageInput").value.trim();
+
+            const recipient = "pbaranzini@vistavineyards.com";
+            const subject = `Message from ${name} - GrapeTrack`;
+            const body = `Name: ${name}
+Email: ${email}
+
+Message:
+${message}`;
+
+            const mailtoLink = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+            window.location.href = mailtoLink;
+        });
+    </script>
 </body>
 
 </html>
