@@ -315,6 +315,39 @@
             color: var(--burgundy)
         }
 
+        .mini-btn {
+            border: 0;
+            border-radius: 999px;
+            padding: 8px 12px;
+            font-weight: 900;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: .72rem;
+            background: var(--burgundy);
+            color: var(--cream);
+            transition: .2s
+        }
+
+        .mini-btn:hover {
+            background: var(--black);
+            transform: scale(1.03)
+        }
+
+        .mini-btn.danger {
+            background: #8b1e2d;
+            color: #fff
+        }
+
+        .mini-btn.danger:hover {
+            background: var(--black)
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap
+        }
+
         .form-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -641,6 +674,8 @@
                     </div>
                     <div class="panel">
                         <h2>Lots Table</h2>
+                        <div class="report-actions"><button class="mini-btn danger" onclick="deleteAllLots()">Delete all
+                                lots</button></div>
                         <table id="lotTable"></table><button class="btn" style="margin-top:16px"
                             onclick="getAIInsights()">AI Insights</button>
                         <div class="error" id="aiError"></div>
@@ -764,16 +799,20 @@
         function lots() { let x = localStorage.getItem("grapetrackLots"); if (!x) { localStorage.setItem("grapetrackLots", JSON.stringify(starter)); return starter } return JSON.parse(x) }
         function saveLots(a) { localStorage.setItem("grapetrackLots", JSON.stringify(a)); renderAll() }
         function escapeHtml(s) { return String(s ?? "").replace(/[&<>"]/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[m])) }
+        function escapeAttr(s) { return String(s ?? "").replace(/[\'"]/g, "\\$&") }
         function switchView(id) { document.querySelectorAll(".side-link,.view").forEach(e => e.classList.remove("active")); document.querySelector(`.side-link[data-view="${id}"]`)?.classList.add("active"); document.getElementById(id).classList.add("active"); document.querySelector('.sidebar').classList.remove('open'); document.getElementById('mainContent').scrollTop = 0; window.scrollTo({ top: 0, behavior: 'smooth' }); if (id === "reports") renderReportSheet(); if (id === "export") renderExportPreview() }
         document.querySelectorAll(".side-link").forEach(a => a.onclick = () => switchView(a.dataset.view));
         let chart;
-        function renderAll() { const data = lots(); document.getElementById("kpis").innerHTML = [["Lots", data.length], ["Failed", data.filter(x => x.status !== "Passed").length], ["Cases", data.reduce((s, x) => s + (+x.cases || 0), 0)], ["Growers", new Set(data.map(x => x.grower)).size]].map(k => `<div class="card"><div>${k[0]}</div><div class="num">${k[1]}</div></div>`).join(""); let rows = "<tr>" + ["Lot", "Truck", "Grower", "Variety", "Cases", "Status", "Details"].map(h => `<th onclick="sortTable('${h.toLowerCase()}')">${h}</th>`).join("") + "</tr>"; rows += data.map((x, i) => `<tr><td><button class="table-link" onclick="openLotModal(${i})">${escapeHtml(x.lotId)}</button></td><td>${escapeHtml(x.truck)}</td><td>${escapeHtml(x.grower)}</td><td>${escapeHtml(x.variety)}</td><td>${escapeHtml(x.cases)}</td><td><span class='status'>${escapeHtml(x.status)}</span></td><td><button class="btn light" onclick="openLotModal(${i})">View all</button></td></tr>`).join(""); document.getElementById("lotTable").innerHTML = rows; renderCards(); renderAlerts(); renderChart(data); renderReportStats(); renderExportPreview() }
-        function openLotModal(i) { const x = lots()[i]; if (!x) return; document.getElementById('modalTitle').textContent = x.lotId || 'Lot details'; const action = x.status === "Canada" ? "Sell Canada" : x.status === "Appeal" ? "Appeal / reinspection" : x.status === "Failed" ? "Review / reinspection" : "Release"; const items = [["Lot ID", x.lotId], ["Date", x.date], ["Truck", x.truck], ["Grower", x.grower], ["Variety", x.variety], ["Cases", x.cases], ["USDA Status", x.status], ["Packaging", x.packaging], ["Defects", (x.defects || []).join(', ') || 'None listed'], ["Recommended Action", action], ["Notes", x.notes || 'No notes']]; document.getElementById('modalBody').innerHTML = '<div class="detail-grid">' + items.map(([k, v]) => `<div class="detail-item"><b>${escapeHtml(k)}</b>${escapeHtml(v)}</div>`).join('') + '</div>'; document.getElementById('lotModal').classList.add('open') }
+        function renderAll() { const data = lots(); document.getElementById("kpis").innerHTML = [["Lots", data.length], ["Failed", data.filter(x => x.status !== "Passed").length], ["Cases", data.reduce((s, x) => s + (+x.cases || 0), 0)], ["Growers", new Set(data.map(x => x.grower)).size]].map(k => `<div class="card"><div>${k[0]}</div><div class="num">${k[1]}</div></div>`).join(""); let rows = "<tr>" + ["Lot", "Truck", "Grower", "Variety", "Cases", "Status", "Actions"].map(h => `<th onclick="sortTable('${h.toLowerCase()}')">${h}</th>`).join("") + "</tr>"; rows += data.map((x) => `<tr><td><button class="table-link" onclick="openLotModalById('${escapeAttr(x.lotId)}')">${escapeHtml(x.lotId)}</button></td><td>${escapeHtml(x.truck)}</td><td>${escapeHtml(x.grower)}</td><td>${escapeHtml(x.variety)}</td><td>${escapeHtml(x.cases)}</td><td><span class='status'>${escapeHtml(x.status)}</span></td><td><div class="table-actions"><button class="mini-btn" onclick="openLotModalById('${escapeAttr(x.lotId)}')">View</button><button class="mini-btn danger" onclick="deleteLot('${escapeAttr(x.lotId)}')">Delete</button></div></td></tr>`).join(""); document.getElementById("lotTable").innerHTML = rows; renderCards(); renderAlerts(); renderChart(data); renderReportStats(); renderExportPreview() }
+        function openLotModalById(id) { const i = lots().findIndex(x => x.lotId === id); openLotModal(i) }
+        function deleteLot(id) { const data = lots(); const lot = data.find(x => x.lotId === id); if (!lot) return; if (!confirm(`Delete lot ${lot.lotId}? This will remove it from localStorage and refresh the report sheet.`)) return; const updated = data.filter(x => x.lotId !== id); localStorage.setItem("grapetrackLots", JSON.stringify(updated)); localStorage.setItem("grapetrackReportSheet", JSON.stringify(lotsToSheetRows(updated))); renderAll(); renderReportSheet(); }
+        function deleteAllLots() { if (!confirm("Delete ALL lots? This cannot be undone unless you exported a backup.")) return; localStorage.setItem("grapetrackLots", JSON.stringify([])); localStorage.setItem("grapetrackReportSheet", JSON.stringify([])); renderAll(); renderReportSheet(); }
+        function openLotModal(i) { const x = lots()[i]; if (!x) return; document.getElementById('modalTitle').textContent = x.lotId || 'Lot details'; const action = x.status === "Canada" ? "Sell Canada" : x.status === "Appeal" ? "Appeal / reinspection" : x.status === "Failed" ? "Review / reinspection" : "Release"; const items = [["Lot ID", x.lotId], ["Date", x.date], ["Truck", x.truck], ["Grower", x.grower], ["Variety", x.variety], ["Cases", x.cases], ["USDA Status", x.status], ["Packaging", x.packaging], ["Defects", (x.defects || []).join(', ') || 'None listed'], ["Recommended Action", action], ["Notes", x.notes || 'No notes']]; document.getElementById('modalBody').innerHTML = '<div class="detail-grid">' + items.map(([k, v]) => `<div class="detail-item"><b>${escapeHtml(k)}</b>${escapeHtml(v)}</div>`).join('') + '</div><div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn" onclick="closeLotModal()">Close</button><button class="mini-btn danger" onclick="deleteLot(\'' + escapeAttr(x.lotId) + '\');closeLotModal()">Delete this lot</button></div>'; document.getElementById('lotModal').classList.add('open') }
         function closeLotModal() { document.getElementById('lotModal').classList.remove('open') }
-        function renderCards() { let q = (document.getElementById("filterLots")?.value || "").toLowerCase(); document.getElementById("lotCards").innerHTML = lots().filter(x => JSON.stringify(x).toLowerCase().includes(q)).map((x, i) => `<div class="lot-card"><h2>${escapeHtml(x.lotId)}</h2><p><b>${escapeHtml(x.variety)}</b> · ${escapeHtml(x.cases)} cases</p><p>${escapeHtml(x.truck)} · ${escapeHtml(x.grower)}</p><p>${escapeHtml((x.defects || []).join(", "))}</p><span class="status">${escapeHtml(x.status)}</span><br><button class="btn" style="margin-top:16px" onclick="openLotModal(${i})">View full lot</button></div>`).join("") }
+        function renderCards() { let q = (document.getElementById("filterLots")?.value || "").toLowerCase(); document.getElementById("lotCards").innerHTML = lots().filter(x => JSON.stringify(x).toLowerCase().includes(q)).map((x) => `<div class="lot-card"><h2>${escapeHtml(x.lotId)}</h2><p><b>${escapeHtml(x.variety)}</b> · ${escapeHtml(x.cases)} cases</p><p>${escapeHtml(x.truck)} · ${escapeHtml(x.grower)}</p><p>${escapeHtml((x.defects || []).join(", "))}</p><span class="status">${escapeHtml(x.status)}</span><br><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px"><button class="btn" onclick="openLotModalById('${escapeAttr(x.lotId)}')">View full lot</button><button class="mini-btn danger" onclick="deleteLot('${escapeAttr(x.lotId)}')">Delete</button></div></div>`).join("") }
         document.getElementById("filterLots").oninput = renderCards;
         function renderAlerts() { const failed = lots().filter(x => x.status !== "Passed"); document.getElementById("alertsBox").innerHTML = failed.length > 1 ? `<div class="lot-card"><h2>Consecutive Failures</h2><p>${failed.length} active failed/appeal lots need attention.</p></div>` : `<div class="lot-card"><h2>No major alerts</h2><p>Only one or zero failed lots.</p></div>` }
-        function renderChart(data) { let counts = {}; data.forEach(l => (l.defects || []).forEach(d => counts[d] = (counts[d] || 0) + 1)); let ctx = document.getElementById("defectChart"); if (chart) chart.destroy(); chart = new Chart(ctx, { type: "bar", data: { labels: Object.keys(counts), datasets: [{ label: "Defects", data: Object.values(counts), backgroundColor: "#4a1020" }] }, options: { animation: { duration: 900 }, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true }, x: { ticks: { color: "#251015" } } } } }) }
+        function renderChart(data) { let counts = {}; data.forEach(l => (l.defects || []).forEach(d => counts[d] = (counts[d] || 0) + 1)); let ctx = document.getElementById("defectChart"); if (chart) chart.destroy(); chart = new Chart(ctx, { type: "bar", data: { labels: Object.keys(counts), datasets: [{ label: "Defects", data: Object.values(counts), backgroundColor: "#4a1020" }] }, options: { animation: { duration: 900 }, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true }, x: { ticks: { color: "#251015" } } } } }); }
         document.getElementById("lotForm").onsubmit = e => { e.preventDefault(); let fd = new FormData(e.target); let obj = Object.fromEntries(fd.entries()); obj.defects = [...e.target.querySelectorAll("input[type=checkbox]:checked")].map(c => c.value); let a = lots(); a.push(obj); saveLots(a); syncSheetFromLots(false); e.target.reset(); document.getElementById("saveMsg").style.display = "block"; setTimeout(() => document.getElementById("saveMsg").style.display = "none", 2200) };
         function getSheet() { return JSON.parse(localStorage.getItem("grapetrackReportSheet") || "[]") }
         function setSheet(rows) { localStorage.setItem("grapetrackReportSheet", JSON.stringify(rows)); renderReportSheet(); renderReportStats(); renderExportPreview() }
@@ -794,7 +833,7 @@
         function downloadReportExcel() { saveReportSheetSoft(); let rows = getSheet(); let html = '<table><tr>' + sheetHeaders.map(h => `<th>${escapeHtml(h)}</th>`).join('') + '</tr>' + rows.map(r => '<tr>' + sheetHeaders.map((_, i) => `<td>${escapeHtml(r[i] || '')}</td>`).join('') + '</tr>').join('') + '</table>'; let a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([html], { type: 'application/vnd.ms-excel' })); a.download = 'grapetrack-report-sheet.xls'; a.click() }
         function downloadCSV() { let data = lots().filter(x => { let f = document.getElementById("fromDate")?.value, t = document.getElementById("toDate")?.value; return (!f || x.date >= f) && (!t || x.date <= t) }); let keys = ["lotId", "truck", "grower", "variety", "cases", "date", "status", "packaging", "defects", "notes"]; let csv = [keys.join(",")].concat(data.map(x => keys.map(k => `"${(Array.isArray(x[k]) ? x[k].join("; ") : (x[k] || "")).toString().replaceAll('"', '""')}"`).join(","))).join("\n"); let a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" })); a.download = "grapetrack-lots.csv"; a.click() }
         async function getAIInsights() { const out = document.getElementById("aiOutput"), err = document.getElementById("aiError"); out.style.display = err.style.display = "none"; try { const res = await fetch("https://api.anthropic.com/v1/messages", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 1000, messages: [{ role: "user", content: "Summarize USDA grape inspection issues from this JSON: " + JSON.stringify(lots()) }] }) }); if (!res.ok) throw new Error("API request failed. Add a secure backend proxy and API key before production use."); const data = await res.json(); out.textContent = data.content.filter(b => b.type === "text").map(b => b.text).join(""); out.style.display = "block" } catch (e) { err.textContent = e.message; err.style.display = "block" } }
-        function sortTable(k) { if (k === 'details') return; let map = { lot: "lotId" }; let key = map[k] || k; saveLots(lots().sort((a, b) => String(a[key] || "").localeCompare(String(b[key] || "")))) }
+        function sortTable(k) { if (k === 'details' || k === 'actions') return; let map = { lot: "lotId" }; let key = map[k] || k; saveLots(lots().sort((a, b) => String(a[key] || "").localeCompare(String(b[key] || "")))) }
         renderAll(); renderReportSheet();
     </script>
 </body>
