@@ -416,72 +416,70 @@
                     </div>
                     <div class="panel">
                         <h2>Lots Table</h2>
-                        <table id="lotTable"></table><button class="btn" style="margin-top:16px"
-                            onclick="getAIInsights()">AI Insights</button>
-                        <div class="error" id="aiError"></div>
-                        <div class="success" id="aiOutput"></div>
+                        <table id="lotTable"></table><button class="btn" style="margin-top:16px" class="success"
+                            id="aiOutput">
                     </div>
                 </div>
-            </section>
-            <section class="view" id="new">
-                <h1>Nueva</h1>
-                <div class="panel">
-                    <h2>New Inspection Lot</h2>
-                    <form id="lotForm" class="form-grid">
-                        <label class="field">Lot ID<input required name="lotId" placeholder="26M04-8"></label><label
-                            class="field">Truck<input name="truck" placeholder="TC-33"></label><label
-                            class="field">Grower<input name="grower" placeholder="M03"></label><label
-                            class="field">Variety<input name="variety" placeholder="Flame"></label><label
-                            class="field">Cases<input type="number" name="cases" placeholder="960"></label><label
-                            class="field">Date<input type="date" name="date"></label><label class="field">Status<select
-                                name="status">
-                                <option>Passed</option>
-                                <option>Failed</option>
-                                <option>Appeal</option>
-                                <option>Canada</option>
-                            </select></label><label class="field">Packaging<input name="packaging"
-                                placeholder='10/2 "Vista Vineyards" clamshell'></label>
-                        <div class="field" style="grid-column:1/-1">Defects<div class="checks"><label><input
-                                        type="checkbox" value="Shattered berries"> Shattered
-                                    berries</label><label><input type="checkbox" value="Scars">
-                                    Scars</label><label><input type="checkbox" value="Less than 1/4 lb bunches"> Less
-                                    than 1/4 lb bunches</label><label><input type="checkbox" value="Straggly">
-                                    Straggly</label><label><input type="checkbox" value="Damage by trimming"> Damage by
-                                    trimming</label><label><input type="checkbox" value="Mixed bunch sizes"> Mixed bunch
-                                    sizes</label></div>
-                        </div>
-                        <label class="field" style="grid-column:1/-1">Notes<textarea
-                                name="notes"></textarea></label><button class="btn" type="submit">Save Lot</button>
-                    </form>
-                    <div id="saveMsg" class="success">Lot saved in localStorage.</div>
+    </div>
+    </section>
+    <section class="view" id="new">
+        <h1>Nueva</h1>
+        <div class="panel">
+            <h2>New Inspection Lot</h2>
+            <form id="lotForm" class="form-grid">
+                <label class="field">Lot ID<input required name="lotId" placeholder="26M04-8"></label><label
+                    class="field">Truck<input name="truck" placeholder="TC-33"></label><label class="field">Grower<input
+                        name="grower" placeholder="M03"></label><label class="field">Variety<input name="variety"
+                        placeholder="Flame"></label><label class="field">Cases<input type="number" name="cases"
+                        placeholder="960"></label><label class="field">Date<input type="date" name="date"></label><label
+                    class="field">Status<select name="status">
+                        <option>Passed</option>
+                        <option>Failed</option>
+                        <option>Appeal</option>
+                        <option>Canada/etc?</option>
+                    </select></label><label class="field">Packaging<input name="packaging"
+                        placeholder='10/2 "Vista Vineyards" clamshell'></label>
+                <div class="field" style="grid-column:1/-1">Defects<div class="checks"><label><input type="checkbox"
+                                value="Shattered berries"> Shattered
+                            berries</label><label><input type="checkbox" value="Scars">
+                            Scars</label><label><input type="checkbox" value="Less than 1/4 lb bunches"> Less
+                            than 1/4 lb bunches</label><label><input type="checkbox" value="Straggly">
+                            Straggly</label><label><input type="checkbox" value="Damage by trimming"> Damage by
+                            trimming</label><label><input type="checkbox" value="Mixed bunch sizes"> Mixed bunch
+                            sizes</label></div>
                 </div>
-            </section>
-            <section class="view" id="lots">
-                <h1>Lotes</h1><input id="filterLots" placeholder="Filter lots..." style="width:100%;margin-bottom:20px">
-                <div class="cards" id="lotCards"></div>
-            </section>
-            <section class="view" id="reports">
-                <h1>Reportes</h1>
-                <div class="panel">
-                    <h2>Report Builder</h2>
-                    <p>Select a lot from LOTES, then use the notes and defect summary to write USDA inspection reports.
-                    </p><button class="btn" onclick="downloadCSV()">Download All Lots CSV</button>
-                </div>
-            </section>
-            <section class="view" id="alerts">
-                <h1>Alertas</h1>
-                <div class="cards" id="alertsBox"></div>
-            </section>
-            <section class="view" id="export">
-                <h1>Exportar</h1>
-                <div class="panel">
-                    <h2>Date Range Export</h2>
-                    <div class="form-grid"><label class="field">From<input type="date" id="fromDate"></label><label
-                            class="field">To<input type="date" id="toDate"></label></div><button class="btn"
-                        style="margin-top:18px" onclick="downloadCSV()">Download CSV</button>
-                </div>
-            </section>
-        </main>
+                <label class="field" style="grid-column:1/-1">Notes<textarea name="notes"></textarea></label><button
+                    class="btn" type="submit">Save Lot</button>
+            </form>
+            <div id="saveMsg" class="success">Lot saved in localStorage.</div>
+        </div>
+    </section>
+    <section class="view" id="lots">
+        <h1>Lotes</h1><input id="filterLots" placeholder="Filter lots..." style="width:100%;margin-bottom:20px">
+        <div class="cards" id="lotCards"></div>
+    </section>
+    <section class="view" id="reports">
+        <h1>Reportes</h1>
+        <div class="panel">
+            <h2>Report Builder</h2>
+            <p>Select a lot from LOTES, then use the notes and defect summary to write USDA inspection reports.
+            </p><button class="btn" onclick="downloadCSV()">Download All Lots CSV</button>
+        </div>
+    </section>
+    <section class="view" id="alerts">
+        <h1>Alertas</h1>
+        <div class="cards" id="alertsBox"></div>
+    </section>
+    <section class="view" id="export">
+        <h1>Exportar</h1>
+        <div class="panel">
+            <h2>Date Range Export</h2>
+            <div class="form-grid"><label class="field">From<input type="date" id="fromDate"></label><label
+                    class="field">To<input type="date" id="toDate"></label></div><button class="btn"
+                style="margin-top:18px" onclick="downloadCSV()">Download CSV</button>
+        </div>
+    </section>
+    </main>
     </div>
     <footer class="footer"><span>@pedrobaranzini</span><span>hello@reallygreatsite.com</span><span>Nogales, AZ</span>
     </footer>
