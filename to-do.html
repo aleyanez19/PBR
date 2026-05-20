@@ -5,7 +5,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GrapeTrack To-Do</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
     <style>
         :root {
             --black: #0a0a0a;
@@ -14,7 +13,8 @@
             --card: #f6f2e8;
             --gray: #d6d6d3;
             --gold: #9a873f;
-            --ink: #251015
+            --ink: #251015;
+            --white: #fffdf7
         }
 
         * {
@@ -38,16 +38,6 @@
             to {
                 opacity: 1;
                 transform: translateY(0)
-            }
-        }
-
-        @keyframes growBar {
-            from {
-                transform: scaleY(0)
-            }
-
-            to {
-                transform: scaleY(1)
             }
         }
 
@@ -93,156 +83,59 @@
         }
 
         main {
-            padding: 56px 7vw
+            padding: 46px 7vw
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: 1.2fr .8fr;
+            gap: 24px;
+            align-items: end;
+            margin-bottom: 28px
         }
 
         .hero-title {
             font-family: "Arial Black", Impact, sans-serif;
-            font-size: clamp(4rem, 12vw, 11rem);
+            font-size: clamp(4rem, 12vw, 10rem);
             line-height: .82;
             letter-spacing: -.08em;
             color: var(--burgundy);
             text-transform: uppercase;
-            margin: 0 0 40px
+            margin: 0
         }
 
-        .section {
-            margin: 48px 0
+        .hero-card {
+            background: var(--black);
+            color: var(--cream);
+            border-radius: 30px;
+            padding: 26px
         }
 
-        .panel,
-        .todo-card {
+        .hero-card h2 {
+            color: var(--cream);
+            margin-top: 0
+        }
+
+        .quickbar {
+            display: grid;
+            grid-template-columns: 1.3fr .8fr .7fr .7fr auto;
+            gap: 12px;
             background: var(--card);
             border-radius: 26px;
-            padding: 24px;
-            transition: transform .2s, box-shadow .2s
+            padding: 18px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 24px rgba(74, 16, 32, .08)
         }
 
-        .panel:hover,
-        .todo-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 14px 24px rgba(74, 16, 32, .13)
-        }
-
-        h2 {
-            font-family: "Arial Black", Impact, sans-serif;
-            color: var(--burgundy);
-            text-transform: uppercase;
-            font-size: 2rem
-        }
-
-        .swatches {
-            display: flex;
-            gap: 34px;
-            align-items: center
-        }
-
-        .swatch {
-            width: 110px;
-            height: 58px;
-            border-radius: 999px
-        }
-
-        .circle {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%
-        }
-
-        .black {
-            background: var(--black)
-        }
-
-        .burg {
-            background: var(--burgundy)
-        }
-
-        .gold {
-            background: var(--gold)
-        }
-
-        .grid2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 22px
-        }
-
-        .grid3 {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px
-        }
-
-        canvas {
-            max-height: 330px
-        }
-
-        .spreadsheet {
-            height: 470px;
-            background: #fff;
-            border: 1px solid #cfcfcf;
-            background-image: linear-gradient(#d9d9d9 1px, transparent 1px), linear-gradient(90deg, #d9d9d9 1px, transparent 1px);
-            background-size: 100% 32px, 105px 100%;
-            position: relative
-        }
-
-        .spreadsheet:after {
-            content: "LJDN";
-            position: absolute;
-            right: 20px;
-            bottom: 12px;
-            font-size: .8rem
-        }
-
-        .kanban {
-            display: grid;
-            grid-template-columns: 260px 1fr;
-            gap: 30px
-        }
-
-        .dates {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 18px
-        }
-
-        .datebox,
-        .notes {
-            background: #f8f8f2;
-            border-radius: 2px;
-            padding: 22px;
-            font-family: "Arial Black", Impact, sans-serif;
-            color: var(--burgundy)
-        }
-
-        .datebox {
-            font-size: 3rem;
-            line-height: .85
-        }
-
-        .notes {
-            height: 70px;
-            font-size: 1.2rem;
-            margin-bottom: 20px
-        }
-
-        .columns {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px
-        }
-
-        .col h3 {
-            text-align: center;
-            font-weight: 400
-        }
-
-        .todo-card {
-            min-height: 210px
-        }
-
-        .todo-card ul {
-            line-height: 1.6
+        input,
+        select,
+        textarea {
+            border: 0;
+            background: white;
+            border-radius: 14px;
+            padding: 13px;
+            font: inherit;
+            color: var(--ink)
         }
 
         .btn {
@@ -253,12 +146,174 @@
             border-radius: 999px;
             font-weight: 900;
             cursor: pointer;
+            text-transform: uppercase;
             transition: .25s
         }
 
         .btn:hover {
             background: var(--black);
             transform: scale(1.03)
+        }
+
+        .btn.light {
+            background: var(--cream);
+            color: var(--burgundy)
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px
+        }
+
+        .stat,
+        .panel,
+        .task,
+        .note {
+            background: var(--card);
+            border-radius: 26px;
+            padding: 22px;
+            transition: .2s
+        }
+
+        .stat:hover,
+        .panel:hover,
+        .task:hover,
+        .note:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 14px 24px rgba(74, 16, 32, .13)
+        }
+
+        .stat .num {
+            font-family: "Arial Black", Impact, sans-serif;
+            font-size: 2.8rem;
+            color: var(--burgundy)
+        }
+
+        h2 {
+            font-family: "Arial Black", Impact, sans-serif;
+            color: var(--burgundy);
+            text-transform: uppercase;
+            margin: 0 0 14px
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 22px
+        }
+
+        .notion-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px
+        }
+
+        .note {
+            background: var(--white)
+        }
+
+        .note b {
+            color: var(--burgundy)
+        }
+
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 16px
+        }
+
+        .pill {
+            border: 1px solid rgba(74, 16, 32, .25);
+            background: transparent;
+            color: var(--burgundy);
+            border-radius: 999px;
+            padding: 9px 13px;
+            font-weight: 900;
+            cursor: pointer
+        }
+
+        .pill.active {
+            background: var(--burgundy);
+            color: var(--cream)
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px
+        }
+
+        .col {
+            background: rgba(255, 255, 255, .35);
+            border-radius: 28px;
+            padding: 16px;
+            min-height: 420px
+        }
+
+        .col h3 {
+            margin: 0 0 14px;
+            font-size: .95rem;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            color: var(--burgundy)
+        }
+
+        .task {
+            background: var(--white);
+            margin-bottom: 12px;
+            cursor: grab
+        }
+
+        .task-title {
+            font-weight: 900;
+            font-size: 1.05rem
+        }
+
+        .meta {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 12px
+        }
+
+        .tag {
+            font-size: .72rem;
+            border-radius: 999px;
+            padding: 6px 9px;
+            background: var(--cream);
+            color: var(--burgundy);
+            font-weight: 900
+        }
+
+        .priority-high {
+            background: var(--burgundy);
+            color: var(--cream)
+        }
+
+        .priority-med {
+            background: var(--gold);
+            color: white
+        }
+
+        .priority-low {
+            background: #ded7c7
+        }
+
+        .date {
+            font-size: .8rem;
+            margin-top: 10px;
+            color: #6c5b5f
+        }
+
+        .empty {
+            border: 2px dashed rgba(74, 16, 32, .25);
+            border-radius: 22px;
+            padding: 20px;
+            text-align: center;
+            color: #7a6268
         }
 
         .footer {
@@ -268,28 +323,27 @@
             justify-content: space-between;
             gap: 18px;
             padding: 30px 7vw;
-            font-size: .9rem
+            font-size: .9rem;
+            margin-top: 40px
         }
 
-        @media(max-width:850px) {
+        @media(max-width:950px) {
+
+            .hero,
+            .layout,
+            .board,
+            .stats,
+            .quickbar {
+                grid-template-columns: 1fr
+            }
+
             .top-nav {
                 flex-wrap: wrap;
                 gap: 15px
             }
 
-            .grid2,
-            .grid3,
-            .kanban,
-            .columns {
-                grid-template-columns: 1fr
-            }
-
             .footer {
                 flex-direction: column
-            }
-
-            .swatches {
-                flex-wrap: wrap
             }
         }
     </style>
@@ -299,88 +353,99 @@
     <nav class="top-nav"><a href="index.html">Home</a><a href="dashboard.html">Dashboard</a><a
             href="about.html">About</a><a class="active" href="to-do.html">To-Do</a></nav>
     <main>
-        <h1 class="hero-title">TO-DO</h1>
-        <section class="section panel">
-            <h2>Color Palette</h2>
-            <div class="swatches">
-                <div class="swatch black"></div>
-                <div class="circle burg"></div>
-                <div class="circle gold"></div>
+        <section class="hero">
+            <div>
+                <h1 class="hero-title">TO-DO</h1>
+                <p style="max-width:680px;line-height:1.6">A simple Notion-inspired workspace for daily warehouse tasks,
+                    inspection reminders, calls, and personal notes. No spreadsheet here anymore — reports live inside
+                    the dashboard.</p>
+            </div>
+            <div class="hero-card">
+                <h2>Today Focus</h2>
+                <p id="todayFocus">Keep the important grape inspection tasks visible and easy to move.</p><button
+                    class="btn light" onclick="fillSampleTasks()">Load sample vibe</button>
             </div>
         </section>
-        <section class="section panel">
-            <h2>Typography</h2>
-            <p
-                style="font-family:'Arial Black',Impact,sans-serif;font-size:5rem;letter-spacing:-.07em;margin:0;color:#4a1020">
-                TO-DO / ABOUT VISTA</p>
-            <p>Massive uppercase display type paired with simple readable body copy.</p>
-        </section>
-        <section class="section grid2">
-            <div class="panel">
-                <h2>Area Chart</h2><canvas id="areaChart"></canvas>
+        <form class="quickbar" id="taskForm"><input name="title" required
+                placeholder="New task... ex: Call USDA about 26M02-2"><select name="type">
+                <option>Inspection</option>
+                <option>Call</option>
+                <option>Report</option>
+                <option>Warehouse</option>
+                <option>Personal</option>
+            </select><select name="priority">
+                <option>High</option>
+                <option>Medium</option>
+                <option>Low</option>
+            </select><input type="date" name="due"><button class="btn">Add</button></form>
+        <section class="stats">
+            <div class="stat">
+                <div>Total</div>
+                <div class="num" id="totalCount">0</div>
             </div>
-            <div class="panel">
-                <h2>Histogram</h2><canvas id="barChart"></canvas>
+            <div class="stat">
+                <div>Not Started</div>
+                <div class="num" id="notCount">0</div>
+            </div>
+            <div class="stat">
+                <div>Started</div>
+                <div class="num" id="startedCount">0</div>
+            </div>
+            <div class="stat">
+                <div>Finished</div>
+                <div class="num" id="finishedCount">0</div>
             </div>
         </section>
-        <section class="section panel">
-            <h2>Spreadsheet Preview</h2>
-            <div class="spreadsheet"></div>
-        </section>
-        <section class="section panel">
-            <h2>To-Do Kanban</h2>
-            <div class="kanban">
-                <div>
-                    <div class="notes">notes</div>
-                    <div class="dates">
-                        <div class="datebox">MAR<br>13</div>
-                        <div class="datebox">MAY</div>
-                    </div>
-                    <h2 style="font-size:1.5rem;margin-top:80px">links</h2>
+        <section class="layout">
+            <aside class="panel">
+                <h2>Workspace</h2>
+                <div class="notion-list">
+                    <div class="note"><b>Quick rule</b><br>Write tasks short. Move them fast.</div>
+                    <div class="note"><b>Inspection flow</b><br>Receive → inspect → report → action.</div>
+                    <div class="note"><b>Useful links</b><br>USDA notes, CoolLink loads, reports, export CSV.</div>
+                    <div class="note"><b>Personal</b><br>Keep school, work, and errands separated by tags.</div>
                 </div>
-                <div>
-                    <div class="columns">
-                        <div class="col">
-                            <h3>Not started</h3>
-                            <div class="todo-card" draggable="true">
-                                <ul>
-                                    <li>Bla bla</li>
-                                    <li>Marcar a</li>
-                                    <li>Inspeccion 8:30-m83</li>
-                                    <li>Contar lotes</li>
-                                    <li>Tarea de weeds</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <h3>Started</h3>
-                            <div class="todo-card" draggable="true">
-                                <ul>
-                                    <li>Bla bla</li>
-                                    <li>Marcar a</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <h3>Finished</h3>
-                            <div class="todo-card" draggable="true">
-                                <ul>
-                                    <li>Bla bla</li>
-                                </ul>
-                            </div>
-                        </div>
+            </aside>
+            <section class="panel">
+                <h2>Task Board</h2>
+                <div class="filters"><button class="pill active" data-filter="All" type="button">All</button><button
+                        class="pill" data-filter="Inspection" type="button">Inspection</button><button class="pill"
+                        data-filter="Call" type="button">Calls</button><button class="pill" data-filter="Report"
+                        type="button">Reports</button><button class="pill" data-filter="Warehouse"
+                        type="button">Warehouse</button><button class="pill" data-filter="Personal"
+                        type="button">Personal</button></div>
+                <div class="board">
+                    <div class="col" data-status="Not started">
+                        <h3>Not started</h3>
+                        <div class="tasks" id="notStarted"></div>
+                    </div>
+                    <div class="col" data-status="Started">
+                        <h3>Started</h3>
+                        <div class="tasks" id="started"></div>
+                    </div>
+                    <div class="col" data-status="Finished">
+                        <h3>Finished</h3>
+                        <div class="tasks" id="finished"></div>
                     </div>
                 </div>
-            </div>
+            </section>
         </section>
     </main>
-    <footer class="footer"><span>@pedrobaranzini</span><span>hello@reallygreatsite.com</span><span>Nogales, AZ</span>
+    <footer class="footer"><span>@pedrobaranzini</span><span>Made by AYZ</span><span>License MT</span>
     </footer>
     <script>
-        new Chart(document.getElementById("areaChart"), { type: "line", data: { labels: ["2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025"], datasets: ["Salud", "Productividad", "Juegos", "Educación"].map((l, i) => ({ label: l, data: [3 + i, 5 + i, 4 + i, 7 + i, 8 + i, 9 + i, 12 + i, 11 + i, 13 + i, 14 + i, 15 + i, 17 + i], fill: true, tension: .4, backgroundColor: ["rgba(74,16,32,.35)", "rgba(74,16,32,.25)", "rgba(154,135,63,.25)", "rgba(10,10,10,.15)"][i], borderColor: "#4a1020" })) }, options: { plugins: { legend: { position: "top" } }, scales: { y: { beginAtZero: true } } } });
-        new Chart(document.getElementById("barChart"), { type: "bar", data: { labels: ["0", "10", "20", "30", "40", "50", "60", "70", "80", "90", "100"], datasets: [{ label: "Grupo etario", data: [1, 2, 6, 10, 17, 20, 16, 10, 7, 3, 1], backgroundColor: "#4a1020" }] }, options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } } });
-        document.querySelectorAll(".todo-card").forEach(card => card.addEventListener("dragstart", e => e.dataTransfer.setData("text/plain", card.innerHTML)));
-        document.querySelectorAll(".col").forEach(col => { col.addEventListener("dragover", e => e.preventDefault()); col.addEventListener("drop", e => { e.preventDefault(); const c = document.createElement("div"); c.className = "todo-card"; c.draggable = true; c.innerHTML = e.dataTransfer.getData("text/plain"); col.appendChild(c); }); });
+        let currentFilter = "All"; let draggedId = null;
+        function getTasks() { return JSON.parse(localStorage.getItem("pbrTasks") || "[]") }
+        function setTasks(tasks) { localStorage.setItem("pbrTasks", JSON.stringify(tasks)); renderTasks() }
+        function taskCard(t) { return `<div class="task" draggable="true" data-id="${t.id}"><div class="task-title">${escapeHtml(t.title)}</div><div class="date">${t.due ? "Due: " + t.due : "No due date"}</div><div class="meta"><span class="tag">${t.type}</span><span class="tag priority-${t.priority.toLowerCase().slice(0, 3)}">${t.priority}</span><button class="pill" onclick="deleteTask('${t.id}')" style="padding:4px 8px;font-size:.7rem">Delete</button></div></div>` }
+        function renderTasks() { const tasks = getTasks().filter(t => currentFilter === "All" || t.type === currentFilter); const all = getTasks(); document.getElementById("totalCount").textContent = all.length; document.getElementById("notCount").textContent = all.filter(t => t.status === "Not started").length; document.getElementById("startedCount").textContent = all.filter(t => t.status === "Started").length; document.getElementById("finishedCount").textContent = all.filter(t => t.status === "Finished").length;[["notStarted", "Not started"], ["started", "Started"], ["finished", "Finished"]].forEach(([id, status]) => { const list = tasks.filter(t => t.status === status); document.getElementById(id).innerHTML = list.length ? list.map(taskCard).join("") : `<div class="empty">Drop tasks here</div>` }); document.querySelectorAll(".task").forEach(card => card.addEventListener("dragstart", () => draggedId = card.dataset.id)) }
+        document.getElementById("taskForm").onsubmit = e => { e.preventDefault(); const fd = new FormData(e.target); const t = Object.fromEntries(fd.entries()); t.id = crypto.randomUUID(); t.status = "Not started"; setTasks([t, ...getTasks()]); e.target.reset() }
+        document.querySelectorAll(".col").forEach(col => { col.addEventListener("dragover", e => e.preventDefault()); col.addEventListener("drop", () => { if (!draggedId) return; const tasks = getTasks().map(t => t.id === draggedId ? { ...t, status: col.dataset.status } : t); setTasks(tasks); draggedId = null }) })
+        document.querySelectorAll(".pill[data-filter]").forEach(btn => btn.onclick = () => { document.querySelectorAll(".pill[data-filter]").forEach(b => b.classList.remove("active")); btn.classList.add("active"); currentFilter = btn.dataset.filter; renderTasks() })
+        function deleteTask(id) { setTasks(getTasks().filter(t => t.id !== id)) }
+        function fillSampleTasks() { setTasks([{ id: crypto.randomUUID(), title: "Call USDA about appeal for 26M02-2", type: "Inspection", priority: "High", due: "2026-05-18", status: "Not started" }, { id: crypto.randomUUID(), title: "Prepare Canada sale note for 26M04-8", type: "Report", priority: "Medium", due: "2026-05-18", status: "Started" }, { id: crypto.randomUUID(), title: "Count lots received at CoolLink", type: "Warehouse", priority: "High", due: "", status: "Not started" }, { id: crypto.randomUUID(), title: "Send update to Oliver", type: "Call", priority: "Low", due: "", status: "Finished" }]) }
+        function escapeHtml(s) { return String(s).replace(/[&<>'"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[c])) }
+        if (!getTasks().length) fillSampleTasks(); else renderTasks();
     </script>
 </body>
 
